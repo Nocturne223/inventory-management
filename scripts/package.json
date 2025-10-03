@@ -1,0 +1,9 @@
+{
+  "name": "inventory-seeding-scripts",
+  "version": "1.0.0",
+  "description": "Scripts for seeding inventory data",
+  "main": "seed-inventory-data.js",
+  "dependencies": {
+    "firebase": "^10.7.1"
+  }
+}
