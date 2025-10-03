@@ -2,7 +2,6 @@
 // All Firebase-related authentication code is commented out
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_riverpod/legacy.dart';
 import '../core/models/user.dart';
 
 // Simple mock providers for testing without Firebase
