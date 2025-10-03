@@ -13,18 +13,6 @@ class FirebaseConfig {
       return web; // Default to web for other platforms
     }
   }
-    if (Platform.isIOS || Platform.isMacOS) {
-      return ios;
-    } else if (Platform.isAndroid) {
-      return android;
-    } else if (Platform.isWindows) {
-      return windows;
-    } else {
-      throw UnsupportedError(
-        'DefaultFirebaseOptions have not been configured for this platform.',
-      );
-    }
-  }
 
   static const FirebaseOptions web = FirebaseOptions(
     apiKey: 'your-web-api-key',
@@ -61,4 +49,3 @@ class FirebaseConfig {
     storageBucket: 'mit-inventory-system.appspot.com',
   );
 }
-*/

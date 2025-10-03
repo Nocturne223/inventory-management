@@ -3,27 +3,27 @@
   "packages": [
     {
       "name": "_fe_analyzer_shared",
-      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/_fe_analyzer_shared-76.0.0",
-      "packageUri": "lib/",
-      "languageVersion": "3.3"
-    },
-    {
-      "name": "_flutterfire_internals",
-      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/_flutterfire_internals-1.3.57",
-      "packageUri": "lib/",
-      "languageVersion": "3.2"
-    },
-    {
-      "name": "_macros",
-      "rootUri": "file:///C:/Users/ealbe/Desktop/Projects/flutter/bin/cache/dart-sdk/pkg/_macros",
+      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/_fe_analyzer_shared-85.0.0",
       "packageUri": "lib/",
       "languageVersion": "3.5"
     },
     {
-      "name": "analyzer",
-      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/analyzer-6.11.0",
+      "name": "_flutterfire_internals",
+      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/_flutterfire_internals-1.3.62",
       "packageUri": "lib/",
-      "languageVersion": "3.3"
+      "languageVersion": "3.2"
+    },
+    {
+      "name": "analyzer",
+      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/analyzer-7.7.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.5"
+    },
+    {
+      "name": "ansicolor",
+      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/ansicolor-2.0.3",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
     },
     {
       "name": "archive",
@@ -45,15 +45,15 @@
     },
     {
       "name": "auto_route",
-      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/auto_route-8.1.4",
+      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/auto_route-10.1.2",
       "packageUri": "lib/",
       "languageVersion": "3.0"
     },
     {
       "name": "auto_route_generator",
-      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/auto_route_generator-8.0.0",
+      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/auto_route_generator-10.2.4",
       "packageUri": "lib/",
-      "languageVersion": "3.3"
+      "languageVersion": "3.4"
     },
     {
       "name": "barcode",
@@ -75,15 +75,15 @@
     },
     {
       "name": "build",
-      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/build-2.5.4",
+      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/build-3.1.0",
       "packageUri": "lib/",
       "languageVersion": "3.7"
     },
     {
       "name": "build_config",
-      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/build_config-1.1.2",
+      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/build_config-1.2.0",
       "packageUri": "lib/",
-      "languageVersion": "3.6"
+      "languageVersion": "3.7"
     },
     {
       "name": "build_daemon",
@@ -93,19 +93,19 @@
     },
     {
       "name": "build_resolvers",
-      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/build_resolvers-2.5.4",
+      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/build_resolvers-3.0.3",
       "packageUri": "lib/",
       "languageVersion": "3.7"
     },
     {
       "name": "build_runner",
-      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/build_runner-2.5.4",
+      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/build_runner-2.7.1",
       "packageUri": "lib/",
       "languageVersion": "3.7"
     },
     {
       "name": "build_runner_core",
-      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/build_runner_core-9.1.2",
+      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/build_runner_core-9.3.1",
       "packageUri": "lib/",
       "languageVersion": "3.7"
     },
@@ -123,7 +123,7 @@
     },
     {
       "name": "cached_network_image",
-      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/cached_network_image-3.4.1",
+      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/cached_network_image-3.4.0",
       "packageUri": "lib/",
       "languageVersion": "3.0"
     },
@@ -135,7 +135,7 @@
     },
     {
       "name": "cached_network_image_web",
-      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/cached_network_image_web-1.3.1",
+      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/cached_network_image_web-1.3.0",
       "packageUri": "lib/",
       "languageVersion": "3.0"
     },
@@ -150,6 +150,12 @@
       "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/checked_yaml-2.0.4",
       "packageUri": "lib/",
       "languageVersion": "3.8"
+    },
+    {
+      "name": "cli_config",
+      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/cli_config-0.2.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
     },
     {
       "name": "clock",
@@ -182,6 +188,12 @@
       "languageVersion": "3.4"
     },
     {
+      "name": "coverage",
+      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/coverage-1.15.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.4"
+    },
+    {
       "name": "cross_file",
       "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/cross_file-0.3.4+2",
       "packageUri": "lib/",
@@ -201,9 +213,9 @@
     },
     {
       "name": "dart_style",
-      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/dart_style-2.3.8",
+      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/dart_style-3.1.1",
       "packageUri": "lib/",
-      "languageVersion": "3.0"
+      "languageVersion": "3.7"
     },
     {
       "name": "dartx",
@@ -261,73 +273,73 @@
     },
     {
       "name": "firebase_auth",
-      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth-5.6.1",
+      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth-6.1.0",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
     {
       "name": "firebase_auth_platform_interface",
-      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_platform_interface-7.7.1",
+      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_platform_interface-8.1.2",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
     {
       "name": "firebase_auth_web",
-      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.15.1",
+      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-6.0.3",
       "packageUri": "lib/",
       "languageVersion": "3.4"
     },
     {
       "name": "firebase_core",
-      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_core-3.15.0",
+      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_core-4.1.1",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
     {
       "name": "firebase_core_platform_interface",
-      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_core_platform_interface-5.4.2",
+      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_core_platform_interface-6.0.1",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
     {
       "name": "firebase_core_web",
-      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_core_web-2.24.0",
+      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_core_web-3.1.1",
       "packageUri": "lib/",
       "languageVersion": "3.4"
     },
     {
       "name": "firebase_database",
-      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_database-11.3.8",
+      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_database-12.0.2",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
     {
       "name": "firebase_database_platform_interface",
-      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_database_platform_interface-0.2.6+8",
+      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_database_platform_interface-0.2.6+13",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
     {
       "name": "firebase_database_web",
-      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_database_web-0.2.6+14",
+      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_database_web-0.2.6+19",
       "packageUri": "lib/",
       "languageVersion": "3.4"
     },
     {
       "name": "firebase_storage",
-      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_storage-12.4.8",
+      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_storage-13.0.2",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
     {
       "name": "firebase_storage_platform_interface",
-      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_storage_platform_interface-5.2.8",
+      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_storage_platform_interface-5.2.13",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
     {
       "name": "firebase_storage_web",
-      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_storage_web-3.10.15",
+      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_storage_web-3.10.20",
       "packageUri": "lib/",
       "languageVersion": "3.4"
     },
@@ -339,9 +351,9 @@
     },
     {
       "name": "fl_chart",
-      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/fl_chart-0.65.0",
+      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/fl_chart-1.1.0",
       "packageUri": "lib/",
-      "languageVersion": "3.0"
+      "languageVersion": "3.6"
     },
     {
       "name": "flutter",
@@ -357,27 +369,27 @@
     },
     {
       "name": "flutter_gen",
-      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_gen-5.4.0",
+      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_gen-5.12.0",
       "packageUri": "lib/",
-      "languageVersion": "2.17"
+      "languageVersion": "3.4"
     },
     {
       "name": "flutter_gen_core",
-      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_gen_core-5.4.0",
+      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_gen_core-5.12.0",
       "packageUri": "lib/",
-      "languageVersion": "2.17"
+      "languageVersion": "3.4"
     },
     {
       "name": "flutter_gen_runner",
-      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_gen_runner-5.4.0",
+      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_gen_runner-5.12.0",
       "packageUri": "lib/",
-      "languageVersion": "2.17"
+      "languageVersion": "3.4"
     },
     {
       "name": "flutter_lints",
-      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_lints-3.0.2",
+      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_lints-6.0.0",
       "packageUri": "lib/",
-      "languageVersion": "3.1"
+      "languageVersion": "3.8"
     },
     {
       "name": "flutter_plugin_android_lifecycle",
@@ -387,9 +399,9 @@
     },
     {
       "name": "flutter_riverpod",
-      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_riverpod-2.6.1",
+      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_riverpod-3.0.1",
       "packageUri": "lib/",
-      "languageVersion": "2.17"
+      "languageVersion": "3.7"
     },
     {
       "name": "flutter_staggered_grid_view",
@@ -417,7 +429,7 @@
     },
     {
       "name": "get_it",
-      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/get_it-7.7.0",
+      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/get_it-8.2.0",
       "packageUri": "lib/",
       "languageVersion": "3.0"
     },
@@ -438,6 +450,18 @@
       "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/graphs-2.3.2",
       "packageUri": "lib/",
       "languageVersion": "3.4"
+    },
+    {
+      "name": "hashcodes",
+      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/hashcodes-2.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "hotreloader",
+      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/hotreloader-4.3.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
     },
     {
       "name": "http",
@@ -512,10 +536,16 @@
       "languageVersion": "3.6"
     },
     {
-      "name": "intl",
-      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/intl-0.18.1",
+      "name": "image_size_getter",
+      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/image_size_getter-2.4.1",
       "packageUri": "lib/",
       "languageVersion": "2.12"
+    },
+    {
+      "name": "intl",
+      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/intl-0.20.2",
+      "packageUri": "lib/",
+      "languageVersion": "3.3"
     },
     {
       "name": "io",
@@ -537,9 +567,9 @@
     },
     {
       "name": "json_serializable",
-      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/json_serializable-6.9.0",
+      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/json_serializable-6.11.1",
       "packageUri": "lib/",
-      "languageVersion": "3.5"
+      "languageVersion": "3.8"
     },
     {
       "name": "leak_tracker",
@@ -560,20 +590,20 @@
       "languageVersion": "3.2"
     },
     {
-      "name": "lints",
-      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/lints-3.0.0",
+      "name": "lean_builder",
+      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/lean_builder-0.1.2",
       "packageUri": "lib/",
-      "languageVersion": "3.0"
+      "languageVersion": "3.8"
+    },
+    {
+      "name": "lints",
+      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/lints-6.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.8"
     },
     {
       "name": "logging",
       "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/logging-1.3.0",
-      "packageUri": "lib/",
-      "languageVersion": "3.4"
-    },
-    {
-      "name": "macros",
-      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/macros-0.1.3-main.0",
       "packageUri": "lib/",
       "languageVersion": "3.4"
     },
@@ -604,6 +634,12 @@
     {
       "name": "nested",
       "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/nested-1.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "node_preamble",
+      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/node_preamble-2.0.2",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -753,9 +789,9 @@
     },
     {
       "name": "riverpod",
-      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/riverpod-2.6.1",
+      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/riverpod-3.0.1",
       "packageUri": "lib/",
-      "languageVersion": "2.17"
+      "languageVersion": "3.7"
     },
     {
       "name": "rxdart",
@@ -765,13 +801,13 @@
     },
     {
       "name": "share_plus",
-      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/share_plus-7.2.2",
+      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/share_plus-12.0.0",
       "packageUri": "lib/",
-      "languageVersion": "2.18"
+      "languageVersion": "3.4"
     },
     {
       "name": "share_plus_platform_interface",
-      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/share_plus_platform_interface-3.4.0",
+      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/share_plus_platform_interface-6.1.0",
       "packageUri": "lib/",
       "languageVersion": "2.18"
     },
@@ -782,10 +818,22 @@
       "languageVersion": "3.4"
     },
     {
-      "name": "shelf_web_socket",
-      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/shelf_web_socket-3.0.0",
+      "name": "shelf_packages_handler",
+      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/shelf_packages_handler-3.0.2",
       "packageUri": "lib/",
-      "languageVersion": "3.5"
+      "languageVersion": "2.17"
+    },
+    {
+      "name": "shelf_static",
+      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/shelf_static-1.1.3",
+      "packageUri": "lib/",
+      "languageVersion": "3.3"
+    },
+    {
+      "name": "shelf_web_socket",
+      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/shelf_web_socket-2.0.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.3"
     },
     {
       "name": "sky_engine",
@@ -795,15 +843,27 @@
     },
     {
       "name": "source_gen",
-      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/source_gen-1.5.0",
+      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/source_gen-3.1.0",
       "packageUri": "lib/",
-      "languageVersion": "3.0"
+      "languageVersion": "3.7"
     },
     {
       "name": "source_helper",
-      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/source_helper-1.3.5",
+      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/source_helper-1.3.8",
       "packageUri": "lib/",
-      "languageVersion": "3.4"
+      "languageVersion": "3.7"
+    },
+    {
+      "name": "source_map_stack_trace",
+      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/source_map_stack_trace-2.1.2",
+      "packageUri": "lib/",
+      "languageVersion": "3.3"
+    },
+    {
+      "name": "source_maps",
+      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/source_maps-0.10.13",
+      "packageUri": "lib/",
+      "languageVersion": "3.3"
     },
     {
       "name": "source_span",
@@ -879,15 +939,15 @@
     },
     {
       "name": "syncfusion_flutter_charts",
-      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/syncfusion_flutter_charts-23.2.7",
+      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/syncfusion_flutter_charts-31.1.19",
       "packageUri": "lib/",
-      "languageVersion": "2.17"
+      "languageVersion": "3.7"
     },
     {
       "name": "syncfusion_flutter_core",
-      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/syncfusion_flutter_core-23.2.7",
+      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/syncfusion_flutter_core-31.1.19",
       "packageUri": "lib/",
-      "languageVersion": "2.17"
+      "languageVersion": "3.7"
     },
     {
       "name": "synchronized",
@@ -902,8 +962,20 @@
       "languageVersion": "3.1"
     },
     {
+      "name": "test",
+      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/test-1.25.15",
+      "packageUri": "lib/",
+      "languageVersion": "3.5"
+    },
+    {
       "name": "test_api",
       "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/test_api-0.7.4",
+      "packageUri": "lib/",
+      "languageVersion": "3.5"
+    },
+    {
+      "name": "test_core",
+      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/test_core-0.6.8",
       "packageUri": "lib/",
       "languageVersion": "3.5"
     },
@@ -980,6 +1052,18 @@
       "languageVersion": "3.0"
     },
     {
+      "name": "vector_graphics_codec",
+      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/vector_graphics_codec-1.1.13",
+      "packageUri": "lib/",
+      "languageVersion": "3.4"
+    },
+    {
+      "name": "vector_graphics_compiler",
+      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/vector_graphics_compiler-1.1.19",
+      "packageUri": "lib/",
+      "languageVersion": "3.7"
+    },
+    {
       "name": "vector_math",
       "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/vector_math-2.1.4",
       "packageUri": "lib/",
@@ -993,7 +1077,7 @@
     },
     {
       "name": "watcher",
-      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/watcher-1.1.3",
+      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/watcher-1.1.4",
       "packageUri": "lib/",
       "languageVersion": "3.1"
     },
@@ -1016,6 +1100,12 @@
       "languageVersion": "3.3"
     },
     {
+      "name": "webkit_inspection_protocol",
+      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/webkit_inspection_protocol-1.2.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
       "name": "win32",
       "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/win32-5.14.0",
       "packageUri": "lib/",
@@ -1032,6 +1122,12 @@
       "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/xml-6.6.1",
       "packageUri": "lib/",
       "languageVersion": "3.8"
+    },
+    {
+      "name": "xxh3",
+      "rootUri": "file:///C:/Users/ealbe/AppData/Local/Pub/Cache/hosted/pub.dev/xxh3-1.2.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.16"
     },
     {
       "name": "yaml",

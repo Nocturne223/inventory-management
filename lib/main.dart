@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-// import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:google_fonts/google_fonts.dart';
-// import 'core/config/firebase_config.dart';
+import 'core/config/firebase_config.dart';
 import 'core/router/app_router.dart';
 import 'core/theme/app_theme.dart';
 // import 'features/auth/presentation/pages/login_page.dart';
@@ -12,11 +12,22 @@ import 'core/locator.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // Initialize DI locator (use mocks by default)
-  setupLocator(useMocks: true);
-  // await Firebase.initializeApp(
-  //   options: FirebaseConfig.currentPlatform,
-  // );
+  // Initialize Firebase and then the DI locator.
+  // On success we register Firestore-backed repositories; on failure we
+  // fall back to mocks so the app remains runnable during development.
+  try {
+    await Firebase.initializeApp(options: FirebaseConfig.currentPlatform);
+    // Use Firestore-backed implementations
+    setupLocator(useMocks: false);
+  } catch (e) {
+    // If Firebase fails to initialize (no config, network, etc.),
+    // register mock implementations so the UI can still run.
+    // After you run `flutterfire configure` and generate
+    // `firebase_options.dart` you can replace FirebaseConfig.currentPlatform
+    // with DefaultFirebaseOptions.currentPlatform.
+    setupLocator(useMocks: true);
+  }
+
   runApp(const ProviderScope(child: InventoryApp()));
 }
 
