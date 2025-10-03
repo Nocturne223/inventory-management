@@ -1,9 +1,11 @@
+// ignore_for_file: deprecated_member_use, use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../../../../providers/auth_service.dart';
+import '../../../../providers/firebase_auth_provider.dart';
 import '../../../../core/theme/app_theme.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
@@ -21,6 +23,14 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   bool _obscurePassword = true;
 
   @override
+  void initState() {
+    super.initState();
+    // Pre-fill with admin credentials for testing
+    _emailController.text = 'admin@mit.edu';
+    _passwordController.text = 'MITAdmin123!';
+  }
+
+  @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
@@ -35,10 +45,10 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     });
 
     try {
-      final authService = ref.read(authServiceProvider);
-      await authService.signInWithEmailAndPassword(
-        _emailController.text.trim(),
-        _passwordController.text,
+      final authNotifier = ref.read(authNotifierProvider.notifier);
+      await authNotifier.signIn(
+        email: _emailController.text.trim(),
+        password: _passwordController.text,
       );
 
       if (mounted) {
@@ -110,12 +120,12 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       if (credential.user != null) {
         // Create user document in Firestore
         await firestore.collection('users').doc(credential.user!.uid).set({
-          'id': credential.user!.uid,
           'email': 'admin@mit.edu',
           'name': 'MIT Admin',
-          'role': 'admin',
+          'role': 'Admin',
           'createdAt': DateTime.now().toIso8601String(),
           'lastLoginAt': DateTime.now().toIso8601String(),
+          'isActive': true,
         });
 
         if (mounted) {
@@ -187,8 +197,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 
   Future<void> _testFirebaseConnection() async {
     try {
-      // ignore: unused_local_variable
-      final auth = FirebaseAuth.instance;
       final firestore = FirebaseFirestore.instance;
 
       // Test Firestore connection
@@ -454,21 +462,14 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                             ),
                             const SizedBox(height: 8),
                             Text(
-                              'Admin: admin@mit.edu / admin123',
+                              'Email: admin@mit.edu',
                               style: GoogleFonts.roboto(
                                 fontSize: 14,
                                 color: Colors.blue[600],
                               ),
                             ),
                             Text(
-                              'Manager: manager@mit.edu / manager123',
-                              style: GoogleFonts.roboto(
-                                fontSize: 14,
-                                color: Colors.blue[600],
-                              ),
-                            ),
-                            Text(
-                              'User: user@mit.edu / user123',
+                              'Password: MITAdmin123!',
                               style: GoogleFonts.roboto(
                                 fontSize: 14,
                                 color: Colors.blue[600],
@@ -526,9 +527,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
               if (emailController.text.trim().isEmpty) return;
 
               try {
-                await ref.read(authServiceProvider).resetPassword(
-                      emailController.text.trim(),
-                    );
+                final authNotifier = ref.read(authNotifierProvider.notifier);
+                await authNotifier.resetPassword(emailController.text.trim());
 
                 if (mounted) {
                   Navigator.pop(context);
