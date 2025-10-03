@@ -12,7 +12,7 @@ final mockCurrentUserProvider = StateProvider<AppUser?>((ref) {
     firstName: 'Test',
     lastName: 'Admin',
     displayName: 'Test Admin',
-    role: UserRole.admin,
+    role: UserRole.superAdmin,
     department: 'IT Department',
     isActive: true,
     createdAt: DateTime.now(),
@@ -23,6 +23,8 @@ final mockCurrentUserProvider = StateProvider<AppUser?>((ref) {
       'canManageLaboratories': true,
       'canManageDeployments': true,
       'canViewAnalytics': true,
+      'canManageSystem': true,
+      'canManageData': true,
     },
   );
 });

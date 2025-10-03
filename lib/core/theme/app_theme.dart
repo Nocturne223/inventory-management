@@ -242,6 +242,7 @@ class AppTheme {
 // Custom colors for different component categories
 class ComponentColors {
   static const Map<String, Color> categoryColors = {
+    // Hardware Categories
     'CPU': Color(0xFFFF6B35),
     'RAM': Color(0xFF004E89),
     'Motherboard': Color(0xFF7209B7),
@@ -254,7 +255,24 @@ class ComponentColors {
     'Mouse': Color(0xFF343A40),
     'Network': Color(0xFF0F3460),
     'Audio': Color(0xFF16213E),
+
+    // From seed data categories
+    'Computer': Color(0xFF2D9BF0),
+    'Laptop': Color(0xFF007BFF),
+    'Electronics': Color(0xFFFF6B35),
+    'Test Equipment': Color(0xFF28A745),
+    'Network Equipment': Color(0xFF0F3460),
+    'Printer': Color(0xFF6C757D),
+    'Server': Color(0xFF495057),
+    'Projector': Color(0xFFFFBA08),
+    'Audio/Video': Color(0xFF16213E),
+    'Software': Color(0xFF7209B7),
+    'Furniture': Color(0xFF6F4E37),
+
+    // Default
     'Other': Color(0xFF6C757D),
+    'No Data': Color(0xFFCCCCCC),
+    'Error': Color(0xFFDC3545),
   };
 
   static Color getCategoryColor(String category) {

@@ -187,6 +187,36 @@ class InventoryService {
     };
   }
 
+  // Get category distribution for pie chart
+  Future<Map<String, double>> getCategoryDistribution() async {
+    try {
+      final items = await _firestore.collection('items').get();
+      final categoryCount = <String, int>{};
+
+      // Count items by category
+      for (var doc in items.docs) {
+        final category = doc.data()['category'] ?? 'Other';
+        categoryCount[category] = (categoryCount[category] ?? 0) + 1;
+      }
+
+      final total = items.docs.length;
+      if (total == 0) {
+        return {'No Data': 100.0};
+      }
+
+      // Convert to percentages
+      final distribution = <String, double>{};
+      categoryCount.forEach((category, count) {
+        distribution[category] = (count / total) * 100;
+      });
+
+      return distribution;
+    } catch (e) {
+      print('Error getting category distribution: $e');
+      return {'Error': 100.0};
+    }
+  }
+
   // Categories
   List<String> getCategories() {
     return [
