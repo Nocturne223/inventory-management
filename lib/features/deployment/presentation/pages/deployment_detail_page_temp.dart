@@ -17,7 +17,6 @@ class DeploymentDetailPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final deploymentAsync = ref.watch(deploymentProvider(deploymentId));
-    // final historyAsync = ref.watch(deploymentHistoryProvider(deploymentId)); // Commented out - not used
 
     return Scaffold(
       appBar: AppBar(
@@ -124,11 +123,6 @@ class DeploymentDetailPage extends ConsumerWidget {
                 // Action Buttons
                 if (deployment.status == 'active')
                   _ActionButtons(deployment: deployment),
-
-                const SizedBox(height: 24),
-
-                // Deployment History - Commented out due to loading errors
-                // _HistorySection(historyAsync: historyAsync),
               ],
             ),
           );
@@ -659,152 +653,3 @@ class _ActionButtons extends StatelessWidget {
     );
   }
 }
-
-// Commented out _HistorySection due to loading errors
-/*
-class _HistorySection extends StatelessWidget {
-  final AsyncValue<List<DeploymentHistory>> historyAsync;
-
-  const _HistorySection({required this.historyAsync});
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Deployment History',
-              style: GoogleFonts.inter(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                color: Theme.of(context).primaryColor,
-              ),
-            ),
-            const SizedBox(height: 12),
-            historyAsync.when(
-              data: (history) {
-                if (history.isEmpty) {
-                  return Text(
-                    'No history available',
-                    style: GoogleFonts.inter(color: Colors.grey[600]),
-                  );
-                }
-
-                return Column(
-                  children: history
-                      .map((entry) => _HistoryItem(entry: entry))
-                      .toList(),
-                );
-              },
-              loading: () => const CircularProgressIndicator(),
-              error: (_, __) => Text(
-                'Error loading history',
-                style: GoogleFonts.inter(color: Colors.red),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-*/
-
-// Commented out _HistoryItem class as it's only used by _HistorySection
-/*
-class _HistoryItem extends StatelessWidget {
-  final DeploymentHistory entry;
-
-  const _HistoryItem({required this.entry});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            width: 8,
-            height: 8,
-            margin: const EdgeInsets.only(top: 6),
-            decoration: BoxDecoration(
-              color: _getActionColor(entry.action),
-              shape: BoxShape.circle,
-            ),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  _getActionDisplayText(entry.action),
-                  style: GoogleFonts.inter(
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                if (entry.notes != null) ...[
-                  const SizedBox(height: 2),
-                  Text(
-                    entry.notes!,
-                    style: GoogleFonts.inter(
-                      fontSize: 12,
-                      color: Colors.grey[600],
-                    ),
-                  ),
-                ],
-                const SizedBox(height: 2),
-                Text(
-                  '${entry.performedBy} • ${_formatDateTime(entry.timestamp)}',
-                  style: GoogleFonts.inter(
-                    fontSize: 11,
-                    color: Colors.grey[500],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Color _getActionColor(String action) {
-    switch (action) {
-      case 'deployed':
-        return Colors.green;
-      case 'returned':
-        return Colors.blue;
-      case 'extended':
-        return Colors.orange;
-      case 'updated':
-        return Colors.purple;
-      default:
-        return Colors.grey;
-    }
-  }
-
-  String _getActionDisplayText(String action) {
-    switch (action) {
-      case 'deployed':
-        return 'Item deployed';
-      case 'returned':
-        return 'Item returned';
-      case 'extended':
-        return 'Deployment extended';
-      case 'updated':
-        return 'Deployment updated';
-      default:
-        return action;
-    }
-  }
-
-  String _formatDateTime(DateTime dateTime) {
-    return '${dateTime.day}/${dateTime.month}/${dateTime.year} ${dateTime.hour}:${dateTime.minute.toString().padLeft(2, '0')}';
-  }
-}
-*/

@@ -12,13 +12,13 @@ Since the automated scripts are having permission issues, here's a manual guide 
 
 Navigate to the "users" collection and create these documents manually:
 
-### 1. Admin User (existing)
+### 1. Admin User (example)
 
 **Document ID:** `APduHk4yn8TL1W9oahqYI0w4efU2`
 
 ```json
 {
-  "email": "admin@mit.edu",
+  "email": "admin@example.edu",
   "name": "System Administrator",
   "role": "Admin",
   "createdAt": "2024-12-19T10:00:00.000Z",
@@ -123,7 +123,7 @@ Navigate to the "users" collection and create these documents manually:
 
 ```json
 {
-  "email": "superadmin@mit.edu",
+  "email": "superadmin@example.edu",
   "name": "Super Administrator",
   "role": "SuperAdmin",
   "createdAt": "2024-12-19T10:00:00.000Z",

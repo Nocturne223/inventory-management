@@ -32,9 +32,9 @@ Your MIT Inventory Management System is now live on Firebase Hosting.
 ## 🎯 **How to Access:**
 
 1. **Visit:** https://inventory-management-aefea.web.app
-2. **Login** with admin credentials above
+2. **Login** with your admin credentials
 3. **Access Data Management:**
-   - Press `F12` → Three dots menu → "Data Management"
+   - Use Admin menu → "Data Management" (for SuperAdmin users)
    - Click "Add Sample Data" to populate the database
 4. **Explore Features:**
    - Dashboard analytics

@@ -32,7 +32,7 @@ class InventoryApp extends ConsumerWidget {
     final authState = ref.watch(authStateProvider);
 
     return MaterialApp(
-      title: 'MIT College IT Inventory System',
+      title: 'AssetFlow Inventory & Deployment System',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,

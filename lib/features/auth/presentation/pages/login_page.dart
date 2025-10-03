@@ -25,9 +25,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   @override
   void initState() {
     super.initState();
-    // Pre-fill with admin credentials for testing
-    _emailController.text = 'admin@mit.edu';
-    _passwordController.text = 'MITAdmin123!';
+    // Controllers start empty - users can input their own credentials
   }
 
   @override
@@ -101,9 +99,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
             ),
           );
 
-          // Pre-fill the form with admin credentials
-          _emailController.text = 'admin@mit.edu';
-          _passwordController.text = 'MITAdmin123!';
+          // Admin credentials exist - users can manually enter them
         }
         return;
       } catch (signInError) {
@@ -138,9 +134,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
             ),
           );
 
-          // Pre-fill the form with admin credentials
-          _emailController.text = 'admin@mit.edu';
-          _passwordController.text = 'MITAdmin123!';
+          // Admin user created - users can manually enter credentials
         }
       }
     } on FirebaseAuthException catch (e) {
@@ -148,9 +142,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       switch (e.code) {
         case 'email-already-in-use':
           errorMessage = 'Admin user already exists! Try signing in.';
-          // Pre-fill the form
-          _emailController.text = 'admin@mit.edu';
-          _passwordController.text = 'MITAdmin123!';
+          // Users can manually enter the credentials
           break;
         case 'weak-password':
           errorMessage = 'Password is too weak.';
@@ -286,7 +278,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                       ),
                       const SizedBox(height: 24),
                       Text(
-                        'MIT College IT',
+                        'AssetFlow Inventory & Deployment System',
+                        textAlign: TextAlign.center,
                         style: GoogleFonts.roboto(
                           fontSize: 28,
                           fontWeight: FontWeight.bold,
@@ -295,11 +288,11 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                       ),
                       Text(
                         'Inventory Management System',
+                        textAlign: TextAlign.center,
                         style: GoogleFonts.roboto(
                           fontSize: 16,
                           color: Colors.grey[600],
                         ),
-                        textAlign: TextAlign.center,
                       ),
                       const SizedBox(height: 32),
 
@@ -441,43 +434,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                       ),
                       const SizedBox(height: 24),
 
-                      // Demo credentials info
-                      Container(
-                        padding: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          color: Colors.blue.withOpacity(0.1),
-                          borderRadius: BorderRadius.circular(8),
-                          border:
-                              Border.all(color: Colors.blue.withOpacity(0.3)),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Demo Credentials:',
-                              style: GoogleFonts.roboto(
-                                fontWeight: FontWeight.w600,
-                                color: Colors.blue[700],
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-                            Text(
-                              'Email: admin@mit.edu',
-                              style: GoogleFonts.roboto(
-                                fontSize: 14,
-                                color: Colors.blue[600],
-                              ),
-                            ),
-                            Text(
-                              'Password: MITAdmin123!',
-                              style: GoogleFonts.roboto(
-                                fontSize: 14,
-                                color: Colors.blue[600],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                      // Removed demo credentials section - users input their own credentials
                     ],
                   ),
                 ),
