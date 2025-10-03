@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../../services/firestore_inventory_service.dart';
+import '../../../inventory/presentation/pages/add_item_page.dart';
 
 class QuickActionsWidget extends ConsumerWidget {
   const QuickActionsWidget({super.key});
@@ -29,10 +30,15 @@ class QuickActionsWidget extends ConsumerWidget {
               Expanded(
                 child: _QuickActionButton(
                   icon: Icons.add_box,
-                  label: 'Add Component',
+                  label: 'Add Item',
                   color: Colors.blue,
                   onTap: () {
-                    Navigator.pushNamed(context, '/add-component');
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const AddItemPage(),
+                      ),
+                    );
                   },
                 ),
               ),

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../../../../services/firestore_data_service.dart';
+import '../../../../core/models/inventory_models.dart';
 
-class AddComponentPage extends StatefulWidget {
+class AddComponentPage extends ConsumerStatefulWidget {
   final String? category;
   final String? componentId;
 
@@ -12,10 +15,10 @@ class AddComponentPage extends StatefulWidget {
   });
 
   @override
-  State<AddComponentPage> createState() => _AddComponentPageState();
+  ConsumerState<AddComponentPage> createState() => _AddComponentPageState();
 }
 
-class _AddComponentPageState extends State<AddComponentPage> {
+class _AddComponentPageState extends ConsumerState<AddComponentPage> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _brandController = TextEditingController();
@@ -355,20 +358,67 @@ class _AddComponentPageState extends State<AddComponentPage> {
     }
   }
 
-  void _saveComponent() {
+  void _saveComponent() async {
     if (_formKey.currentState!.validate()) {
-      // TODO: Implement save functionality
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            widget.componentId != null
-                ? 'Component updated successfully!'
-                : 'Component added successfully!',
-          ),
-          backgroundColor: Colors.green,
-        ),
-      );
-      Navigator.pop(context);
+      try {
+        final service = ref.read(firestoreDataServiceProvider);
+
+        final now = DateTime.now();
+        final item = InventoryItem(
+          id: widget.componentId ?? '', // Will be set by Firestore
+          name: _nameController.text.trim(),
+          description: _descriptionController.text.trim().isEmpty
+              ? 'No description provided'
+              : _descriptionController.text.trim(),
+          category: _selectedCategory,
+          brand: _brandController.text.trim(),
+          model: _modelController.text.trim(),
+          serialNumber: _serialNumberController.text.trim(),
+          status: _selectedStatus.toUpperCase(),
+          price: double.tryParse(_acquisitionCostController.text) ?? 0.0,
+          purchaseDate: _acquisitionDate,
+          warrantyExpiry: _warrantyExpiry?.toIso8601String(),
+          locationId: 'default-location', // Default location
+          departmentId: 'default-department', // Default department
+          specifications: {
+            'assetTag': _assetTagController.text.trim(),
+          },
+          images: null,
+          createdAt: now,
+          updatedAt: now,
+        );
+
+        if (widget.componentId != null) {
+          await service.updateItem(widget.componentId!, item);
+        } else {
+          await service.addItem(item);
+        }
+
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                widget.componentId != null
+                    ? 'Item updated successfully!'
+                    : 'Item added successfully!',
+              ),
+              backgroundColor: Colors.green,
+            ),
+          );
+          Navigator.pop(context);
+        }
+      } catch (e) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                'Error saving item: $e',
+              ),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      }
     }
   }
 

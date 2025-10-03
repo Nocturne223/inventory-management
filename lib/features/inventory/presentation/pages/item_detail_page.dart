@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/models/inventory_models.dart';
 import '../../providers/inventory_providers.dart';
+import 'edit_item_page.dart';
 
 class ItemDetailPage extends ConsumerWidget {
   final String itemId;
@@ -28,12 +29,15 @@ class ItemDetailPage extends ConsumerWidget {
           IconButton(
             icon: const Icon(Icons.edit),
             onPressed: () {
-              // TODO: Navigate to edit page
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Edit functionality coming soon'),
-                ),
-              );
+              final item = itemStream.value;
+              if (item != null) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => EditItemPage(item: item),
+                  ),
+                );
+              }
             },
           ),
         ],
