@@ -138,6 +138,7 @@ class ItemDetailPage extends ConsumerWidget {
                             description: '',
                             building: '',
                             room: '',
+                            capacity: 0,
                             createdAt: DateTime.now(),
                           ),
                         );

@@ -174,6 +174,7 @@ class Location {
   final String building;
   final String room;
   final String? description;
+  final int capacity;
   final DateTime createdAt;
 
   Location({
@@ -182,6 +183,7 @@ class Location {
     required this.building,
     required this.room,
     this.description,
+    required this.capacity,
     required this.createdAt,
   });
 
@@ -192,6 +194,7 @@ class Location {
       building: map['building'] ?? '',
       room: map['room'] ?? '',
       description: map['description'],
+      capacity: map['capacity'] ?? 20, // Default capacity
       createdAt: parseDateTime(map['createdAt']),
     );
   }
@@ -202,7 +205,26 @@ class Location {
       'building': building,
       'room': room,
       'description': description,
+      'capacity': capacity,
       'createdAt': createdAt.toIso8601String(),
     };
+  }
+
+  Location copyWith({
+    String? name,
+    String? building,
+    String? room,
+    String? description,
+    int? capacity,
+  }) {
+    return Location(
+      id: id,
+      name: name ?? this.name,
+      building: building ?? this.building,
+      room: room ?? this.room,
+      description: description ?? this.description,
+      capacity: capacity ?? this.capacity,
+      createdAt: createdAt,
+    );
   }
 }

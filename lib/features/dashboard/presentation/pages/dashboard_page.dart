@@ -12,7 +12,7 @@ import '../../../inventory/presentation/pages/inventory_list_page_new.dart'
 import '../../../inventory/presentation/pages/add_item_page.dart';
 import '../../../deployment/presentation/pages/deployment_list_page.dart';
 // import '../../../analytics/presentation/pages/analytics_page.dart';
-// import '../../../laboratory/presentation/pages/laboratory_page.dart';
+import '../../../laboratory/presentation/pages/laboratory_page.dart';
 // import '../../../maintenance/presentation/pages/maintenance_page.dart';
 // import '../../../profile/presentation/pages/profile_page.dart';
 import '../../../admin/presentation/pages/data_management_page.dart';
@@ -35,7 +35,7 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
     const new_inventory.InventoryListPage(
         showAppBar: false), // Use the new inventory page without AppBar
     const DeploymentListPage(),
-    const _PlaceholderPage(title: 'Laboratory'),
+    const LaboratoryPage(),
     const _PlaceholderPage(title: 'Maintenance'),
     const _PlaceholderPage(title: 'Analytics'),
   ];
