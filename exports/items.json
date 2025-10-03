@@ -1,0 +1,22 @@
+[
+  {
+    "id": 101,
+    "sku": "ITM-5F9",
+    "name": "8GB DDR4 RAM",
+    "description": "8GB DDR4 module",
+    "category_id": "cat-ram",
+    "supplier_id": null,
+    "model_number": "HX-8G",
+    "specifications": {"memory_type":"DDR4","speed":"3200MHz"},
+    "warranty_period": 12,
+    "minimum_stock": 2,
+    "is_serialized": false,
+    "lifecycle_stage": "active",
+    "replacement_cost": 55.00,
+    "average_lifespan": null,
+    "status": "active",
+    "asset_tag_prefix": "MTA8",
+    "requires_asset_tag": true,
+    "created_at": "2023-01-03T10:00:00Z"
+  }
+]

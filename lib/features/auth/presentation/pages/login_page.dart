@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../../../../providers/auth_provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import '../../../../providers/auth_service.dart';
 import '../../../../core/theme/app_theme.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
@@ -35,8 +37,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     try {
       final authService = ref.read(authServiceProvider);
       await authService.signInWithEmailAndPassword(
-        email: _emailController.text.trim(),
-        password: _passwordController.text,
+        _emailController.text.trim(),
+        _passwordController.text,
       );
 
       if (mounted) {
@@ -56,6 +58,166 @@ class _LoginPageState extends ConsumerState<LoginPage> {
         setState(() {
           _isLoading = false;
         });
+      }
+    }
+  }
+
+  Future<void> _setupAdmin() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      final auth = FirebaseAuth.instance;
+      final firestore = FirebaseFirestore.instance;
+
+      // Check if admin already exists by trying to sign in first
+      try {
+        await auth.signInWithEmailAndPassword(
+          email: 'admin@mit.edu',
+          password: 'MITAdmin123!',
+        );
+
+        // If sign in succeeds, admin already exists
+        await auth.signOut(); // Sign out immediately
+
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text(
+                  'Admin user already exists!\nEmail: admin@mit.edu\nPassword: MITAdmin123!'),
+              backgroundColor: Colors.blue,
+              duration: Duration(seconds: 3),
+            ),
+          );
+
+          // Pre-fill the form with admin credentials
+          _emailController.text = 'admin@mit.edu';
+          _passwordController.text = 'MITAdmin123!';
+        }
+        return;
+      } catch (signInError) {
+        // Admin doesn't exist, continue with creation
+        print('Admin user does not exist, creating...');
+      }
+
+      // Create admin user
+      final credential = await auth.createUserWithEmailAndPassword(
+        email: 'admin@mit.edu',
+        password: 'MITAdmin123!',
+      );
+
+      if (credential.user != null) {
+        // Create user document in Firestore
+        await firestore.collection('users').doc(credential.user!.uid).set({
+          'id': credential.user!.uid,
+          'email': 'admin@mit.edu',
+          'name': 'MIT Admin',
+          'role': 'admin',
+          'createdAt': DateTime.now().toIso8601String(),
+          'lastLoginAt': DateTime.now().toIso8601String(),
+        });
+
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text(
+                  'Admin user created successfully!\nEmail: admin@mit.edu\nPassword: MITAdmin123!'),
+              backgroundColor: Colors.green,
+              duration: Duration(seconds: 5),
+            ),
+          );
+
+          // Pre-fill the form with admin credentials
+          _emailController.text = 'admin@mit.edu';
+          _passwordController.text = 'MITAdmin123!';
+        }
+      }
+    } on FirebaseAuthException catch (e) {
+      String errorMessage;
+      switch (e.code) {
+        case 'email-already-in-use':
+          errorMessage = 'Admin user already exists! Try signing in.';
+          // Pre-fill the form
+          _emailController.text = 'admin@mit.edu';
+          _passwordController.text = 'MITAdmin123!';
+          break;
+        case 'weak-password':
+          errorMessage = 'Password is too weak.';
+          break;
+        case 'invalid-email':
+          errorMessage = 'Invalid email address.';
+          break;
+        case 'operation-not-allowed':
+          errorMessage =
+              'Email/password accounts are not enabled in Firebase Console.';
+          break;
+        default:
+          errorMessage = 'Firebase Error: ${e.message}';
+      }
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(errorMessage),
+            backgroundColor:
+                e.code == 'email-already-in-use' ? Colors.blue : Colors.red,
+            duration: const Duration(seconds: 5),
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Setup error: ${e.toString()}'),
+            backgroundColor: Colors.red,
+            duration: const Duration(seconds: 5),
+          ),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
+  }
+
+  Future<void> _testFirebaseConnection() async {
+    try {
+      // ignore: unused_local_variable
+      final auth = FirebaseAuth.instance;
+      final firestore = FirebaseFirestore.instance;
+
+      // Test Firestore connection
+      await firestore.collection('test').doc('connection-test').set({
+        'timestamp': DateTime.now().toIso8601String(),
+        'test': 'Firebase connection successful'
+      });
+
+      // Clean up test document
+      await firestore.collection('test').doc('connection-test').delete();
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('✅ Firebase connection successful!'),
+            backgroundColor: Colors.green,
+            duration: Duration(seconds: 3),
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('❌ Firebase connection failed: ${e.toString()}'),
+            backgroundColor: Colors.red,
+            duration: const Duration(seconds: 5),
+          ),
+        );
       }
     }
   }
@@ -226,6 +388,47 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+
+                      // Setup Admin button
+                      SizedBox(
+                        width: double.infinity,
+                        height: 48,
+                        child: OutlinedButton.icon(
+                          onPressed: _isLoading ? null : _setupAdmin,
+                          icon: const Icon(Icons.admin_panel_settings),
+                          label: Text(
+                            'Create Admin User',
+                            style: GoogleFonts.roboto(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          style: OutlinedButton.styleFrom(
+                            side:
+                                BorderSide(color: Colors.blue.withOpacity(0.5)),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+
+                      // Test Firebase button
+                      SizedBox(
+                        width: double.infinity,
+                        height: 36,
+                        child: TextButton.icon(
+                          onPressed:
+                              _isLoading ? null : _testFirebaseConnection,
+                          icon: const Icon(Icons.wifi_find, size: 16),
+                          label: Text(
+                            'Test Firebase Connection',
+                            style: GoogleFonts.roboto(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
                         ),
                       ),
                       const SizedBox(height: 24),
