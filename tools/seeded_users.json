@@ -1,0 +1,236 @@
+{
+  "users": [
+    {
+      "uid": "superadmin_001",
+      "email": "emma.superadmin@mit.edu",
+      "firstName": "Emma",
+      "lastName": "SuperAdmin",
+      "displayName": "Emma SuperAdmin",
+      "role": "superAdmin",
+      "department": "IT Department",
+      "phoneNumber": "+1-555-0101",
+      "profileImageUrl": null,
+      "isActive": true,
+      "createdAt": 1759525303594,
+      "lastLogin": 1759518103594,
+      "twoFactorEnabled": true,
+      "permissions": {
+        "create_component": true,
+        "edit_component": true,
+        "delete_component": true,
+        "view_analytics": true,
+        "manage_users": true,
+        "manage_system": true,
+        "manage_data": true,
+        "manage_laboratories": true,
+        "create_deployment": true,
+        "manage_maintenance": true,
+        "generate_reports": true,
+        "system_configuration": true,
+        "backup_restore": true
+      }
+    },
+    {
+      "uid": "admin_001",
+      "email": "john.admin@mit.edu",
+      "firstName": "John",
+      "lastName": "Administrator",
+      "displayName": "John Administrator",
+      "role": "admin",
+      "department": "IT Department",
+      "phoneNumber": "+1-555-0102",
+      "profileImageUrl": null,
+      "isActive": true,
+      "createdAt": 1756933303596,
+      "lastLogin": 1759503703596,
+      "twoFactorEnabled": true,
+      "permissions": {
+        "create_component": true,
+        "edit_component": true,
+        "delete_component": true,
+        "view_analytics": true,
+        "manage_users": true,
+        "manage_laboratories": true,
+        "create_deployment": true,
+        "manage_maintenance": true,
+        "generate_reports": true
+      }
+    },
+    {
+      "uid": "admin_002",
+      "email": "robert.admin@mit.edu",
+      "firstName": "Robert",
+      "lastName": "Davis",
+      "displayName": "Robert Davis",
+      "role": "admin",
+      "department": "System Administration",
+      "phoneNumber": "+1-555-0109",
+      "profileImageUrl": null,
+      "isActive": true,
+      "createdAt": 1755637303596,
+      "lastLogin": 1759438903596,
+      "twoFactorEnabled": true,
+      "permissions": {
+        "create_component": true,
+        "edit_component": true,
+        "delete_component": true,
+        "view_analytics": true,
+        "manage_users": true,
+        "manage_laboratories": true,
+        "create_deployment": true,
+        "manage_maintenance": true,
+        "generate_reports": true
+      }
+    },
+    {
+      "uid": "manager_001",
+      "email": "sarah.manager@mit.edu",
+      "firstName": "Sarah",
+      "lastName": "Johnson",
+      "displayName": "Sarah Johnson",
+      "role": "manager",
+      "department": "Engineering Department",
+      "phoneNumber": "+1-555-0103",
+      "profileImageUrl": null,
+      "isActive": true,
+      "createdAt": 1754341303596,
+      "lastLogin": 1759510903596,
+      "twoFactorEnabled": false,
+      "permissions": {
+        "create_component": true,
+        "edit_component": true,
+        "view_analytics": true,
+        "manage_laboratories": true,
+        "create_deployment": true,
+        "manage_maintenance": true,
+        "generate_reports": true
+      }
+    },
+    {
+      "uid": "manager_002",
+      "email": "maria.manager@mit.edu",
+      "firstName": "Maria",
+      "lastName": "Rodriguez",
+      "displayName": "Maria Rodriguez",
+      "role": "manager",
+      "department": "Research Department",
+      "phoneNumber": "+1-555-0108",
+      "profileImageUrl": null,
+      "isActive": true,
+      "createdAt": 1757797303596,
+      "lastLogin": 1759496503596,
+      "twoFactorEnabled": false,
+      "permissions": {
+        "create_component": true,
+        "edit_component": true,
+        "view_analytics": true,
+        "manage_laboratories": true,
+        "create_deployment": true,
+        "manage_maintenance": true,
+        "generate_reports": true
+      }
+    },
+    {
+      "uid": "technician_001",
+      "email": "mike.tech@mit.edu",
+      "firstName": "Mike",
+      "lastName": "Thompson",
+      "displayName": "Mike Thompson",
+      "role": "technician",
+      "department": "Technical Support",
+      "phoneNumber": "+1-555-0104",
+      "profileImageUrl": null,
+      "isActive": true,
+      "createdAt": 1751749303597,
+      "lastLogin": 1759482103597,
+      "twoFactorEnabled": false,
+      "permissions": {
+        "create_component": true,
+        "edit_component": true,
+        "create_deployment": true,
+        "manage_maintenance": true
+      }
+    },
+    {
+      "uid": "technician_002",
+      "email": "lisa.tech@mit.edu",
+      "firstName": "Lisa",
+      "lastName": "Chen",
+      "displayName": "Lisa Chen",
+      "role": "technician",
+      "department": "Hardware Maintenance",
+      "phoneNumber": "+1-555-0105",
+      "profileImageUrl": null,
+      "isActive": true,
+      "createdAt": 1753045303597,
+      "lastLogin": 1759352503597,
+      "twoFactorEnabled": false,
+      "permissions": {
+        "create_component": true,
+        "edit_component": true,
+        "create_deployment": true,
+        "manage_maintenance": true
+      }
+    },
+    {
+      "uid": "user_001",
+      "email": "jane.user@mit.edu",
+      "firstName": "Jane",
+      "lastName": "Smith",
+      "displayName": "Jane Smith",
+      "role": "user",
+      "department": "Computer Science",
+      "phoneNumber": "+1-555-0106",
+      "profileImageUrl": null,
+      "isActive": true,
+      "createdAt": 1749157303597,
+      "lastLogin": 1759266103597,
+      "twoFactorEnabled": false,
+      "permissions": {
+        "view_components": true
+      }
+    },
+    {
+      "uid": "user_002",
+      "email": "david.user@mit.edu",
+      "firstName": "David",
+      "lastName": "Wilson",
+      "displayName": "David Wilson",
+      "role": "user",
+      "department": "Mathematics",
+      "phoneNumber": "+1-555-0107",
+      "profileImageUrl": null,
+      "isActive": true,
+      "createdAt": 1750885303597,
+      "lastLogin": 1759093303597,
+      "twoFactorEnabled": false,
+      "permissions": {
+        "view_components": true
+      }
+    },
+    {
+      "uid": "user_inactive_001",
+      "email": "inactive.user@mit.edu",
+      "firstName": "Inactive",
+      "lastName": "User",
+      "displayName": "Inactive User",
+      "role": "user",
+      "department": "Test Department",
+      "phoneNumber": "+1-555-0110",
+      "profileImageUrl": null,
+      "isActive": false,
+      "createdAt": 1727989303597,
+      "lastLogin": 1743973303597,
+      "twoFactorEnabled": false,
+      "permissions": {
+        "view_components": true
+      }
+    }
+  ],
+  "metadata": {
+    "totalUsers": 10,
+    "generatedAt": "2025-10-04T05:01:43.601292",
+    "script": "standalone_seed_users.dart",
+    "description": "MIT Inventory Management System - Test Users"
+  }
+}

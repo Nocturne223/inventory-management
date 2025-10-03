@@ -1,0 +1,235 @@
+firebase firestore:write users/superadmin_001 '{
+  "uid": "superadmin_001",
+  "email": "emma.superadmin@mit.edu",
+  "firstName": "Emma",
+  "lastName": "SuperAdmin",
+  "displayName": "Emma SuperAdmin",
+  "role": "superAdmin",
+  "department": "IT Department",
+  "phoneNumber": "+1-555-0101",
+  "profileImageUrl": null,
+  "isActive": true,
+  "createdAt": 1759525499523,
+  "lastLogin": 1759518299523,
+  "twoFactorEnabled": true,
+  "permissions": {
+    "create_component": true,
+    "edit_component": true,
+    "delete_component": true,
+    "view_analytics": true,
+    "manage_users": true,
+    "manage_system": true,
+    "manage_data": true,
+    "manage_laboratories": true,
+    "create_deployment": true,
+    "manage_maintenance": true,
+    "generate_reports": true,
+    "system_configuration": true,
+    "backup_restore": true
+  }
+}'  --project inventory-management-8fb2e
+
+firebase firestore:write users/admin_001 '{
+  "uid": "admin_001",
+  "email": "john.admin@mit.edu",
+  "firstName": "John",
+  "lastName": "Administrator",
+  "displayName": "John Administrator",
+  "role": "admin",
+  "department": "IT Department",
+  "phoneNumber": "+1-555-0102",
+  "profileImageUrl": null,
+  "isActive": true,
+  "createdAt": 1756933499524,
+  "lastLogin": 1759503899524,
+  "twoFactorEnabled": true,
+  "permissions": {
+    "create_component": true,
+    "edit_component": true,
+    "delete_component": true,
+    "view_analytics": true,
+    "manage_users": true,
+    "manage_laboratories": true,
+    "create_deployment": true,
+    "manage_maintenance": true,
+    "generate_reports": true
+  }
+}' --project inventory-management-8fb2e
+
+firebase firestore:write users/admin_002 '{
+  "uid": "admin_002",
+  "email": "robert.admin@mit.edu",
+  "firstName": "Robert",
+  "lastName": "Davis",
+  "displayName": "Robert Davis",
+  "role": "admin",
+  "department": "System Administration",
+  "phoneNumber": "+1-555-0109",
+  "profileImageUrl": null,
+  "isActive": true,
+  "createdAt": 1755637499524,
+  "lastLogin": 1759439099524,
+  "twoFactorEnabled": true,
+  "permissions": {
+    "create_component": true,
+    "edit_component": true,
+    "delete_component": true,
+    "view_analytics": true,
+    "manage_users": true,
+    "manage_laboratories": true,
+    "create_deployment": true,
+    "manage_maintenance": true,
+    "generate_reports": true
+  }
+}' --project inventory-management-8fb2e
+
+firebase firestore:write users/manager_001 '{
+  "uid": "manager_001",
+  "email": "sarah.manager@mit.edu",
+  "firstName": "Sarah",
+  "lastName": "Johnson",
+  "displayName": "Sarah Johnson",
+  "role": "manager",
+  "department": "Engineering Department",
+  "phoneNumber": "+1-555-0103",
+  "profileImageUrl": null,
+  "isActive": true,
+  "createdAt": 1754341499524,
+  "lastLogin": 1759511099524,
+  "twoFactorEnabled": false,
+  "permissions": {
+    "create_component": true,
+    "edit_component": true,
+    "view_analytics": true,
+    "manage_laboratories": true,
+    "create_deployment": true,
+    "manage_maintenance": true,
+    "generate_reports": true
+  }
+}' --project inventory-management-8fb2e
+
+firebase firestore:write users/manager_002 '{
+  "uid": "manager_002",
+  "email": "maria.manager@mit.edu",
+  "firstName": "Maria",
+  "lastName": "Rodriguez",
+  "displayName": "Maria Rodriguez",
+  "role": "manager",
+  "department": "Research Department",
+  "phoneNumber": "+1-555-0108",
+  "profileImageUrl": null,
+  "isActive": true,
+  "createdAt": 1757797499524,
+  "lastLogin": 1759496699524,
+  "twoFactorEnabled": false,
+  "permissions": {
+    "create_component": true,
+    "edit_component": true,
+    "view_analytics": true,
+    "manage_laboratories": true,
+    "create_deployment": true,
+    "manage_maintenance": true,
+    "generate_reports": true
+  }
+}' --project inventory-management-8fb2e
+
+firebase firestore:write users/technician_001 '{
+  "uid": "technician_001",
+  "email": "mike.tech@mit.edu",
+  "firstName": "Mike",
+  "lastName": "Thompson",
+  "displayName": "Mike Thompson",
+  "role": "technician",
+  "department": "Technical Support",
+  "phoneNumber": "+1-555-0104",
+  "profileImageUrl": null,
+  "isActive": true,
+  "createdAt": 1751749499524,
+  "lastLogin": 1759482299524,
+  "twoFactorEnabled": false,
+  "permissions": {
+    "create_component": true,
+    "edit_component": true,
+    "create_deployment": true,
+    "manage_maintenance": true
+  }
+}' --project inventory-management-8fb2e
+
+firebase firestore:write users/technician_002 '{
+  "uid": "technician_002",
+  "email": "lisa.tech@mit.edu",
+  "firstName": "Lisa",
+  "lastName": "Chen",
+  "displayName": "Lisa Chen",
+  "role": "technician",
+  "department": "Hardware Maintenance",
+  "phoneNumber": "+1-555-0105",
+  "profileImageUrl": null,
+  "isActive": true,
+  "createdAt": 1753045499524,
+  "lastLogin": 1759352699524,
+  "twoFactorEnabled": false,
+  "permissions": {
+    "create_component": true,
+    "edit_component": true,
+    "create_deployment": true,
+    "manage_maintenance": true
+  }
+}' --project inventory-management-8fb2e
+
+firebase firestore:write users/user_001 '{
+  "uid": "user_001",
+  "email": "jane.user@mit.edu",
+  "firstName": "Jane",
+  "lastName": "Smith",
+  "displayName": "Jane Smith",
+  "role": "user",
+  "department": "Computer Science",
+  "phoneNumber": "+1-555-0106",
+  "profileImageUrl": null,
+  "isActive": true,
+  "createdAt": 1749157499524,
+  "lastLogin": 1759266299524,
+  "twoFactorEnabled": false,
+  "permissions": {
+    "view_components": true
+  }
+}' --project inventory-management-8fb2e
+
+firebase firestore:write users/user_002 '{
+  "uid": "user_002",
+  "email": "david.user@mit.edu",
+  "firstName": "David",
+  "lastName": "Wilson",
+  "displayName": "David Wilson",
+  "role": "user",
+  "department": "Mathematics",
+  "phoneNumber": "+1-555-0107",
+  "profileImageUrl": null,
+  "isActive": true,
+  "createdAt": 1750885499524,
+  "lastLogin": 1759093499524,
+  "twoFactorEnabled": false,
+  "permissions": {
+    "view_components": true
+  }
+}' --project inventory-management-8fb2e
+
+firebase firestore:write users/user_inactive_001 '{
+  "uid": "user_inactive_001",
+  "email": "inactive.user@mit.edu",
+  "firstName": "Inactive",
+  "lastName": "User",
+  "displayName": "Inactive User",
+  "role": "user",
+  "department": "Test Department",
+  "phoneNumber": "+1-555-0110",
+  "profileImageUrl": null,
+  "isActive": false,
+  "createdAt": 1727989499524,
+  "lastLogin": 1743973499524,
+  "twoFactorEnabled": false,
+  "permissions": {
+    "view_components": true
+  }
+}' --project inventory-management-8fb2e

@@ -109,6 +109,7 @@ class AppUser {
 }
 
 enum UserRole {
+  superAdmin,
   admin,
   manager,
   technician,
@@ -118,6 +119,8 @@ enum UserRole {
 extension UserRoleExtension on UserRole {
   String get displayName {
     switch (this) {
+      case UserRole.superAdmin:
+        return 'Super Administrator';
       case UserRole.admin:
         return 'Administrator';
       case UserRole.manager:
@@ -131,6 +134,22 @@ extension UserRoleExtension on UserRole {
 
   List<String> get defaultPermissions {
     switch (this) {
+      case UserRole.superAdmin:
+        return [
+          'create_component',
+          'edit_component',
+          'delete_component',
+          'view_analytics',
+          'manage_users',
+          'manage_system',
+          'manage_data',
+          'manage_laboratories',
+          'create_deployment',
+          'manage_maintenance',
+          'generate_reports',
+          'system_configuration',
+          'backup_restore',
+        ];
       case UserRole.admin:
         return [
           'create_component',
@@ -174,6 +193,8 @@ extension UserRoleExtension on UserRole {
 
   int get level {
     switch (this) {
+      case UserRole.superAdmin:
+        return 5;
       case UserRole.admin:
         return 4;
       case UserRole.manager:

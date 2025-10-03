@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:flutter/foundation.dart';
 import '../../../../providers/auth_provider.dart';
 import '../../../../services/firestore_data_service.dart';
+import '../../../../features/inventory/providers/inventory_providers.dart'
+    as inventory_providers;
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/models/user.dart';
 import '../../../inventory/presentation/pages/inventory_list_page_new.dart'
@@ -16,6 +17,7 @@ import '../../../laboratory/presentation/pages/laboratory_page.dart';
 // import '../../../maintenance/presentation/pages/maintenance_page.dart';
 // import '../../../profile/presentation/pages/profile_page.dart';
 import '../../../admin/presentation/pages/data_management_page.dart';
+import '../../../user_management/presentation/pages/user_management_page.dart';
 import '../widgets/dashboard_stats_card.dart';
 import '../widgets/recent_activities_widget.dart';
 import '../widgets/quick_actions_widget.dart';
@@ -78,48 +80,296 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
           ),
         ),
         actions: [
-          // Developer menu (only in debug mode)
-          if (kDebugMode)
-            PopupMenuButton<String>(
-              icon: const Icon(Icons.more_vert),
-              onSelected: (value) {
-                if (value == 'data_management') {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const DataManagementPage(),
+          // SuperAdmin menu (only for SuperAdmin users)
+          Consumer(
+            builder: (context, ref, child) {
+              final currentUser = ref.watch(currentUserProvider);
+              if (currentUser?.role != UserRole.superAdmin) {
+                return const SizedBox.shrink();
+              }
+
+              return PopupMenuButton<String>(
+                icon: const Icon(Icons.admin_panel_settings),
+                tooltip: 'Admin Tools',
+                onSelected: (value) {
+                  if (value == 'data_management') {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const DataManagementPage(),
+                      ),
+                    );
+                  } else if (value == 'user_management') {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const UserManagementPage(),
+                      ),
+                    );
+                  }
+                },
+                itemBuilder: (context) => [
+                  const PopupMenuItem<String>(
+                    value: 'data_management',
+                    child: Row(
+                      children: [
+                        Icon(Icons.storage),
+                        SizedBox(width: 8),
+                        Text('Data Management'),
+                      ],
                     ),
-                  );
-                }
-              },
-              itemBuilder: (context) => [
-                const PopupMenuItem<String>(
-                  value: 'data_management',
-                  child: Row(
-                    children: [
-                      Icon(Icons.storage),
-                      SizedBox(width: 8),
-                      Text('Data Management'),
-                    ],
                   ),
-                ),
-              ],
-            ),
+                  const PopupMenuItem<String>(
+                    value: 'user_management',
+                    child: Row(
+                      children: [
+                        Icon(Icons.people),
+                        SizedBox(width: 8),
+                        Text('User Management'),
+                      ],
+                    ),
+                  ),
+                ],
+              );
+            },
+          ),
           IconButton(
             icon: const Icon(Icons.notifications),
             onPressed: () {
               // Show notifications
             },
           ),
-          IconButton(
-            icon: const Icon(Icons.account_circle),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) =>
-                      const _PlaceholderPage(title: 'Profile'),
+          // Profile Menu
+          Consumer(
+            builder: (context, ref, child) {
+              final currentUser = ref.watch(currentUserProvider);
+
+              return PopupMenuButton<String>(
+                icon: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    CircleAvatar(
+                      radius: 16,
+                      backgroundColor: Theme.of(context).primaryColor,
+                      child: Text(
+                        currentUser != null
+                            ? '${currentUser.firstName[0]}${currentUser.lastName[0]}'
+                            : 'U',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 4),
+                    const Icon(Icons.arrow_drop_down, size: 16),
+                  ],
                 ),
+                tooltip: 'User Profile',
+                offset: const Offset(0, 45),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                onSelected: (value) async {
+                  if (value == 'profile') {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            const _PlaceholderPage(title: 'Profile'),
+                      ),
+                    );
+                  } else if (value == 'logout') {
+                    // Show logout confirmation dialog
+                    final shouldLogout = await showDialog<bool>(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: const Text('Logout'),
+                        content: const Text('Are you sure you want to logout?'),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.pop(context, false),
+                            child: const Text('Cancel'),
+                          ),
+                          ElevatedButton(
+                            onPressed: () => Navigator.pop(context, true),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.red,
+                              foregroundColor: Colors.white,
+                            ),
+                            child: const Text('Logout'),
+                          ),
+                        ],
+                      ),
+                    );
+
+                    if (shouldLogout == true) {
+                      // Perform logout
+                      try {
+                        final authService = ref.read(authServiceProvider);
+                        await authService.signOut();
+
+                        // Clear user state
+                        ref.read(currentUserProvider.notifier).state = null;
+
+                        // Show success message
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Row(
+                                children: [
+                                  Icon(Icons.check_circle, color: Colors.white),
+                                  SizedBox(width: 8),
+                                  Text('Logged out successfully'),
+                                ],
+                              ),
+                              backgroundColor: Colors.green,
+                            ),
+                          );
+
+                          // Navigate to login page explicitly
+                          Navigator.pushNamedAndRemoveUntil(
+                            context,
+                            '/login',
+                            (route) => false,
+                          );
+                        }
+                      } catch (e) {
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Row(
+                                children: [
+                                  const Icon(Icons.error, color: Colors.white),
+                                  const SizedBox(width: 8),
+                                  Expanded(
+                                    child:
+                                        Text('Logout failed: ${e.toString()}'),
+                                  ),
+                                ],
+                              ),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+                        }
+                      }
+                    }
+                  }
+                },
+                itemBuilder: (context) => [
+                  // User info header
+                  PopupMenuItem<String>(
+                    enabled: false,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            CircleAvatar(
+                              radius: 20,
+                              backgroundColor: Theme.of(context).primaryColor,
+                              child: Text(
+                                currentUser != null
+                                    ? '${currentUser.firstName[0]}${currentUser.lastName[0]}'
+                                    : 'U',
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    currentUser?.displayName ?? 'Unknown User',
+                                    style: GoogleFonts.roboto(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.black87,
+                                    ),
+                                  ),
+                                  Text(
+                                    currentUser?.email ??
+                                        'no-email@example.com',
+                                    style: GoogleFonts.roboto(
+                                      fontSize: 13,
+                                      color: Colors.grey[600],
+                                    ),
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 8,
+                                      vertical: 2,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: currentUser?.role ==
+                                              UserRole.superAdmin
+                                          ? Colors.purple.withValues(alpha: 0.1)
+                                          : Colors.blue.withValues(alpha: 0.1),
+                                      borderRadius: BorderRadius.circular(12),
+                                      border: Border.all(
+                                        color: currentUser?.role ==
+                                                UserRole.superAdmin
+                                            ? Colors.purple
+                                                .withValues(alpha: 0.3)
+                                            : Colors.blue
+                                                .withValues(alpha: 0.3),
+                                      ),
+                                    ),
+                                    child: Text(
+                                      currentUser?.role.displayName ??
+                                          'Unknown Role',
+                                      style: TextStyle(
+                                        fontSize: 11,
+                                        fontWeight: FontWeight.w500,
+                                        color: currentUser?.role ==
+                                                UserRole.superAdmin
+                                            ? Colors.purple[700]
+                                            : Colors.blue[700],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                        const Divider(height: 20),
+                      ],
+                    ),
+                  ),
+                  // Profile option
+                  const PopupMenuItem<String>(
+                    value: 'profile',
+                    child: Row(
+                      children: [
+                        Icon(Icons.person, size: 20),
+                        SizedBox(width: 12),
+                        Text('View Profile'),
+                      ],
+                    ),
+                  ),
+                  // Logout option
+                  const PopupMenuItem<String>(
+                    value: 'logout',
+                    child: Row(
+                      children: [
+                        Icon(Icons.logout, size: 20, color: Colors.red),
+                        SizedBox(width: 12),
+                        Text(
+                          'Logout',
+                          style: TextStyle(color: Colors.red),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               );
             },
           ),
@@ -167,6 +417,8 @@ class DashboardHome extends ConsumerWidget {
     final currentUser = ref.watch(mockCurrentUserProvider);
     final inventoryStats = ref.watch(inventoryStatsProvider);
     final deploymentStats = ref.watch(deploymentStatsProvider);
+    final categoryDistribution =
+        ref.watch(inventory_providers.categoryDistributionProvider);
 
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
@@ -366,42 +618,47 @@ class DashboardHome extends ConsumerWidget {
                 ),
               ],
             ),
-            child: PieChart(
-              PieChartData(
-                sections: [
-                  PieChartSectionData(
-                    value: 30,
-                    title: 'CPU',
-                    color: ComponentColors.getCategoryColor('CPU'),
+            child: categoryDistribution.when(
+              data: (distribution) {
+                if (distribution.isEmpty) {
+                  return const Center(
+                    child: Text(
+                      'No inventory data available',
+                      style: TextStyle(fontSize: 16, color: Colors.grey),
+                    ),
+                  );
+                }
+
+                final sections = distribution.entries.map((entry) {
+                  return PieChartSectionData(
+                    value: entry.value,
+                    title: entry.key,
+                    color: ComponentColors.getCategoryColor(entry.key),
                     radius: 50,
+                    titleStyle: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  );
+                }).toList();
+
+                return PieChart(
+                  PieChartData(
+                    sections: sections,
+                    centerSpaceRadius: 40,
+                    sectionsSpace: 2,
                   ),
-                  PieChartSectionData(
-                    value: 25,
-                    title: 'RAM',
-                    color: ComponentColors.getCategoryColor('RAM'),
-                    radius: 50,
-                  ),
-                  PieChartSectionData(
-                    value: 20,
-                    title: 'Storage',
-                    color: ComponentColors.getCategoryColor('Storage'),
-                    radius: 50,
-                  ),
-                  PieChartSectionData(
-                    value: 15,
-                    title: 'GPU',
-                    color: ComponentColors.getCategoryColor('Graphics Card'),
-                    radius: 50,
-                  ),
-                  PieChartSectionData(
-                    value: 10,
-                    title: 'Other',
-                    color: ComponentColors.getCategoryColor('Other'),
-                    radius: 50,
-                  ),
-                ],
-                centerSpaceRadius: 40,
-                sectionsSpace: 2,
+                );
+              },
+              loading: () => const Center(
+                child: CircularProgressIndicator(),
+              ),
+              error: (error, stack) => const Center(
+                child: Text(
+                  'Error loading category data',
+                  style: TextStyle(fontSize: 16, color: Colors.red),
+                ),
               ),
             ),
           ),

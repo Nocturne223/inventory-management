@@ -13,7 +13,8 @@ final inventoryItemsProvider = StreamProvider<List<InventoryItem>>((ref) {
   return service.getInventoryItems();
 });
 
-final inventoryItemProvider = FutureProvider.family<InventoryItem?, String>((ref, id) {
+final inventoryItemProvider =
+    FutureProvider.family<InventoryItem?, String>((ref, id) {
   final service = ref.watch(inventoryServiceProvider);
   return service.getInventoryItem(id);
 });
@@ -25,7 +26,8 @@ final statusFilterProvider = StateProvider<String>((ref) => 'All');
 final departmentFilterProvider = StateProvider<String>((ref) => 'All');
 
 // Filtered Items Provider
-final filteredInventoryItemsProvider = Provider<AsyncValue<List<InventoryItem>>>((ref) {
+final filteredInventoryItemsProvider =
+    Provider<AsyncValue<List<InventoryItem>>>((ref) {
   final itemsAsync = ref.watch(inventoryItemsProvider);
   final searchQuery = ref.watch(searchQueryProvider);
   final categoryFilter = ref.watch(categoryFilterProvider);
@@ -39,25 +41,30 @@ final filteredInventoryItemsProvider = Provider<AsyncValue<List<InventoryItem>>>
     if (searchQuery.isNotEmpty) {
       filteredItems = filteredItems.where((item) {
         return item.name.toLowerCase().contains(searchQuery.toLowerCase()) ||
-               item.brand.toLowerCase().contains(searchQuery.toLowerCase()) ||
-               item.model.toLowerCase().contains(searchQuery.toLowerCase()) ||
-               item.serialNumber.toLowerCase().contains(searchQuery.toLowerCase());
+            item.brand.toLowerCase().contains(searchQuery.toLowerCase()) ||
+            item.model.toLowerCase().contains(searchQuery.toLowerCase()) ||
+            item.serialNumber.toLowerCase().contains(searchQuery.toLowerCase());
       }).toList();
     }
 
     // Apply category filter
     if (categoryFilter != 'All') {
-      filteredItems = filteredItems.where((item) => item.category == categoryFilter).toList();
+      filteredItems = filteredItems
+          .where((item) => item.category == categoryFilter)
+          .toList();
     }
 
     // Apply status filter
     if (statusFilter != 'All') {
-      filteredItems = filteredItems.where((item) => item.status == statusFilter).toList();
+      filteredItems =
+          filteredItems.where((item) => item.status == statusFilter).toList();
     }
 
     // Apply department filter
     if (departmentFilter != 'All') {
-      filteredItems = filteredItems.where((item) => item.departmentId == departmentFilter).toList();
+      filteredItems = filteredItems
+          .where((item) => item.departmentId == departmentFilter)
+          .toList();
     }
 
     return filteredItems;
@@ -70,7 +77,8 @@ final departmentsProvider = StreamProvider<List<Department>>((ref) {
   return service.getDepartments();
 });
 
-final departmentProvider = FutureProvider.family<Department?, String>((ref, id) {
+final departmentProvider =
+    FutureProvider.family<Department?, String>((ref, id) {
   final service = ref.watch(inventoryServiceProvider);
   return service.getDepartment(id);
 });
@@ -92,6 +100,12 @@ final inventoryStatsProvider = FutureProvider<Map<String, int>>((ref) {
   return service.getInventoryStats();
 });
 
+// Category Distribution Provider for Pie Chart
+final categoryDistributionProvider = FutureProvider<Map<String, double>>((ref) {
+  final service = ref.watch(inventoryServiceProvider);
+  return service.getCategoryDistribution();
+});
+
 // Categories and Statuses Providers
 final categoriesProvider = Provider<List<String>>((ref) {
   final service = ref.watch(inventoryServiceProvider);
@@ -104,7 +118,8 @@ final statusesProvider = Provider<List<String>>((ref) {
 });
 
 // Form State Providers for Add/Edit Item
-final itemFormProvider = StateNotifierProvider<ItemFormNotifier, ItemFormState>((ref) {
+final itemFormProvider =
+    StateNotifierProvider<ItemFormNotifier, ItemFormState>((ref) {
   return ItemFormNotifier();
 });
 
@@ -184,18 +199,26 @@ class ItemFormNotifier extends StateNotifier<ItemFormState> {
   ItemFormNotifier() : super(ItemFormState());
 
   void updateName(String name) => state = state.copyWith(name: name);
-  void updateDescription(String description) => state = state.copyWith(description: description);
-  void updateCategory(String category) => state = state.copyWith(category: category);
+  void updateDescription(String description) =>
+      state = state.copyWith(description: description);
+  void updateCategory(String category) =>
+      state = state.copyWith(category: category);
   void updateBrand(String brand) => state = state.copyWith(brand: brand);
   void updateModel(String model) => state = state.copyWith(model: model);
-  void updateSerialNumber(String serialNumber) => state = state.copyWith(serialNumber: serialNumber);
+  void updateSerialNumber(String serialNumber) =>
+      state = state.copyWith(serialNumber: serialNumber);
   void updateStatus(String status) => state = state.copyWith(status: status);
   void updatePrice(double price) => state = state.copyWith(price: price);
-  void updatePurchaseDate(DateTime date) => state = state.copyWith(purchaseDate: date);
-  void updateWarrantyExpiry(String? warranty) => state = state.copyWith(warrantyExpiry: warranty);
-  void updateLocationId(String locationId) => state = state.copyWith(locationId: locationId);
-  void updateDepartmentId(String departmentId) => state = state.copyWith(departmentId: departmentId);
-  void updateSpecifications(Map<String, dynamic> specs) => state = state.copyWith(specifications: specs);
+  void updatePurchaseDate(DateTime date) =>
+      state = state.copyWith(purchaseDate: date);
+  void updateWarrantyExpiry(String? warranty) =>
+      state = state.copyWith(warrantyExpiry: warranty);
+  void updateLocationId(String locationId) =>
+      state = state.copyWith(locationId: locationId);
+  void updateDepartmentId(String departmentId) =>
+      state = state.copyWith(departmentId: departmentId);
+  void updateSpecifications(Map<String, dynamic> specs) =>
+      state = state.copyWith(specifications: specs);
 
   void setLoading(bool loading) => state = state.copyWith(isLoading: loading);
   void setError(String? error) => state = state.copyWith(error: error);
