@@ -6,7 +6,7 @@ import 'package:flutter/foundation.dart';
 import '../../../../providers/auth_provider.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/models/user.dart';
-// import '../../../inventory/presentation/pages/inventory_list_page.dart';
+import '../../../inventory/presentation/pages/inventory_list_page_new.dart';
 // import '../../../analytics/presentation/pages/analytics_page.dart';
 // import '../../../deployment/presentation/pages/deployment_page.dart';
 // import '../../../laboratory/presentation/pages/laboratory_page.dart';
@@ -29,7 +29,7 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
 
   final List<Widget> _pages = [
     const DashboardHome(),
-    const _PlaceholderPage(title: 'Inventory'),
+    const InventoryListPage(),
     const _PlaceholderPage(title: 'Deployment'),
     const _PlaceholderPage(title: 'Laboratory'),
     const _PlaceholderPage(title: 'Maintenance'),
