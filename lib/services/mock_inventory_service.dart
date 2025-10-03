@@ -39,6 +39,7 @@ class MockInventoryService {
       building: 'Building 32',
       room: 'Room 101',
       description: 'Main Computer Science Building',
+      capacity: 30,
       createdAt: DateTime.now(),
     ),
     Location(
@@ -47,6 +48,7 @@ class MockInventoryService {
       building: 'Building 36',
       room: 'Room 205',
       description: 'Electrical Engineering Lab',
+      capacity: 25,
       createdAt: DateTime.now(),
     ),
     Location(
@@ -55,6 +57,7 @@ class MockInventoryService {
       building: 'Building 32',
       room: 'Room 102',
       description: 'Computer Hardware Lab',
+      capacity: 20,
       createdAt: DateTime.now(),
     ),
   ];

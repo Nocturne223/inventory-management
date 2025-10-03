@@ -60,6 +60,18 @@ class FirestoreDataService {
     return docRef.id;
   }
 
+  Future<void> updateLocation(
+      String id, Map<String, dynamic> locationData) async {
+    await _firestore.collection('locations').doc(id).update({
+      ...locationData,
+      'updatedAt': FieldValue.serverTimestamp(),
+    });
+  }
+
+  Future<void> deleteLocation(String id) async {
+    await _firestore.collection('locations').doc(id).delete();
+  }
+
   // ======================
   // ITEMS COLLECTION
   // ======================
@@ -276,9 +288,8 @@ class FirestoreDataService {
       final status = data['status']?.toString().toLowerCase() ?? '';
 
       if (status == 'active' || status == 'deployed') {
-        stats['active'] = stats['active']! + 1;
-
-        // Check if overdue
+        // Check if overdue first
+        bool isOverdue = false;
         final returnDate = data['expectedReturnDate'];
         if (returnDate != null) {
           DateTime? expectedReturn;
@@ -289,8 +300,14 @@ class FirestoreDataService {
           }
 
           if (expectedReturn != null && expectedReturn.isBefore(now)) {
+            isOverdue = true;
             stats['overdue'] = stats['overdue']! + 1;
           }
+        }
+
+        // Only count as active if NOT overdue
+        if (!isOverdue) {
+          stats['active'] = stats['active']! + 1;
         }
       } else if (status == 'overdue') {
         // Deployments with explicit 'overdue' status

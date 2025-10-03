@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../providers/deployment_providers.dart';
 import '../../../../core/models/deployment_models.dart';
+import '../../../../providers/auth_provider.dart';
 import 'create_deployment_page.dart';
 import 'deployment_detail_page.dart';
 
@@ -248,7 +249,7 @@ class _StatisticsRow extends StatelessWidget {
         const SizedBox(width: 12),
         Expanded(
           child: _StatCard(
-            title: 'Completed',
+            title: 'Returned',
             value: stats['completed']?.toString() ?? '0',
             icon: Icons.check_circle,
             color: Colors.grey,
@@ -500,40 +501,131 @@ class _DeploymentCard extends StatelessWidget {
     return '$days days';
   }
 
+  String _getConditionDisplayName(String condition) {
+    switch (condition) {
+      case 'excellent':
+        return 'Excellent';
+      case 'good':
+        return 'Good';
+      case 'fair':
+        return 'Fair';
+      case 'poor':
+        return 'Poor';
+      case 'damaged':
+        return 'Damaged';
+      default:
+        return condition;
+    }
+  }
+
   void _showReturnDialog(BuildContext context, Deployment deployment) {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Return Item'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-                'Are you sure you want to mark "${deployment.itemName}" as returned?'),
-            const SizedBox(height: 16),
-            const Text(
-                'Note: This action will update the item status and close the deployment.'),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Cancel'),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-              // TODO: Implement return functionality
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Return functionality not implemented yet'),
-                  backgroundColor: Colors.orange,
+      builder: (context) => Consumer(
+        builder: (context, ref, child) {
+          final returnForm = ref.read(returnFormProvider.notifier);
+          final formState = ref.watch(returnFormProvider);
+
+          return AlertDialog(
+            title: const Text('Return Item'),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'Item: ${deployment.itemName}',
+                  style: GoogleFonts.inter(fontWeight: FontWeight.w500),
                 ),
-              );
-            },
-            child: const Text('Return'),
-          ),
-        ],
+                const SizedBox(height: 16),
+                DropdownButtonFormField<String>(
+                  value: formState.returnCondition,
+                  decoration: const InputDecoration(
+                    labelText: 'Return Condition',
+                    border: OutlineInputBorder(),
+                  ),
+                  items: returnConditionOptions.map((condition) {
+                    return DropdownMenuItem(
+                      value: condition,
+                      child: Text(_getConditionDisplayName(condition)),
+                    );
+                  }).toList(),
+                  onChanged: (value) {
+                    returnForm.updateReturnCondition(value!);
+                  },
+                ),
+                const SizedBox(height: 16),
+                TextField(
+                  decoration: const InputDecoration(
+                    labelText: 'Return Notes',
+                    border: OutlineInputBorder(),
+                    hintText: 'Any comments about the return...',
+                  ),
+                  maxLines: 3,
+                  onChanged: (value) {
+                    returnForm.updateReturnNotes(value);
+                  },
+                ),
+                if (formState.error != null) ...[
+                  const SizedBox(height: 12),
+                  Text(
+                    formState.error!,
+                    style: GoogleFonts.inter(
+                      color: Colors.red,
+                      fontSize: 12,
+                    ),
+                  ),
+                ],
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed:
+                    formState.isLoading ? null : () => Navigator.pop(context),
+                child: const Text('Cancel'),
+              ),
+              ElevatedButton(
+                onPressed: formState.isLoading
+                    ? null
+                    : () async {
+                        try {
+                          returnForm.setLoading(true);
+                          final user = ref.read(currentUserProvider);
+                          final service = ref.read(deploymentServiceProvider);
+
+                          await service.returnItem(
+                            deployment.id,
+                            formState.returnCondition,
+                            formState.returnNotes.isNotEmpty
+                                ? formState.returnNotes
+                                : null,
+                            user?.email ?? 'Unknown User',
+                          );
+
+                          if (context.mounted) {
+                            Navigator.pop(context);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Item returned successfully'),
+                                backgroundColor: Colors.green,
+                              ),
+                            );
+                          }
+                        } catch (e) {
+                          returnForm.setError('Failed to return item: $e');
+                        } finally {
+                          returnForm.setLoading(false);
+                        }
+                      },
+                child: formState.isLoading
+                    ? const SizedBox(
+                        width: 16,
+                        height: 16,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      )
+                    : const Text('Return'),
+              ),
+            ],
+          );
+        },
       ),
     );
   }
