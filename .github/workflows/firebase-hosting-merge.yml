@@ -14,7 +14,7 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: 'stable'
+          flutter-version: 'latest'
       - name: Get Flutter packages
         run: flutter pub get
       - name: Build Flutter web
