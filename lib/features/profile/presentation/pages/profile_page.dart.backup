@@ -1,0 +1,324 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_fonts/google_fonts.dart';
+import '../../../../providers/auth_provider.dart';
+import '../../../../core/theme/app_theme.dart';
+
+class ProfilePage extends ConsumerWidget {
+  const ProfilePage({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final currentUser = ref.watch(currentUserProvider);
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          'Profile',
+          style: GoogleFonts.roboto(fontWeight: FontWeight.w600),
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: () async {
+              await ref.read(authServiceProvider).signOut();
+              if (context.mounted) {
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                  '/login',
+                  (route) => false,
+                );
+              }
+            },
+          ),
+        ],
+      ),
+      body: currentUser.when(
+        data: (user) => user != null
+            ? _buildProfileContent(context, user, ref)
+            : const Center(child: Text('User not found')),
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (error, stack) => Center(
+          child: Text('Error: ${error.toString()}'),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildProfileContent(BuildContext context, user, WidgetRef ref) {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        children: [
+          // Profile header
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(24),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  AppTheme.primaryColor,
+                  AppTheme.primaryColor.withOpacity(0.8),
+                ],
+              ),
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: Column(
+              children: [
+                CircleAvatar(
+                  radius: 50,
+                  backgroundColor: Colors.white,
+                  backgroundImage: user.profileImageUrl != null
+                      ? NetworkImage(user.profileImageUrl!)
+                      : null,
+                  child: user.profileImageUrl == null
+                      ? Text(
+                          user.firstName.isNotEmpty
+                              ? user.firstName[0].toUpperCase()
+                              : 'U',
+                          style: GoogleFonts.roboto(
+                            fontSize: 36,
+                            fontWeight: FontWeight.bold,
+                            color: AppTheme.primaryColor,
+                          ),
+                        )
+                      : null,
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  user.displayName,
+                  style: GoogleFonts.roboto(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  user.email,
+                  style: GoogleFonts.roboto(
+                    fontSize: 16,
+                    color: Colors.white.withOpacity(0.9),
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.2),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Text(
+                    user.role.toString().split('.').last.toUpperCase(),
+                    style: GoogleFonts.roboto(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 24),
+
+          // Profile information
+          _buildInfoCard(
+            'Personal Information',
+            [
+              _buildInfoRow('First Name', user.firstName),
+              _buildInfoRow('Last Name', user.lastName),
+              _buildInfoRow('Department', user.department),
+              _buildInfoRow('Phone', user.phoneNumber ?? 'Not provided'),
+            ],
+          ),
+          const SizedBox(height: 16),
+
+          // Account information
+          _buildInfoCard(
+            'Account Information',
+            [
+              _buildInfoRow('Email', user.email),
+              _buildInfoRow('Role', user.role.toString().split('.').last),
+              _buildInfoRow('Status', user.isActive ? 'Active' : 'Inactive'),
+              _buildInfoRow('Member Since', _formatDate(user.createdAt)),
+            ],
+          ),
+          const SizedBox(height: 24),
+
+          // Action buttons
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton(
+              onPressed: () {
+                _showEditProfileDialog(context, user, ref);
+              },
+              child: Text(
+                'Edit Profile',
+                style: GoogleFonts.roboto(fontWeight: FontWeight.w600),
+              ),
+            ),
+          ),
+          const SizedBox(height: 12),
+          SizedBox(
+            width: double.infinity,
+            child: OutlinedButton(
+              onPressed: () {
+                _showChangePasswordDialog(context, ref);
+              },
+              child: Text(
+                'Change Password',
+                style: GoogleFonts.roboto(fontWeight: FontWeight.w600),
+              ),
+            ),
+          ),
+          const SizedBox(height: 12),
+          SizedBox(
+            width: double.infinity,
+            child: TextButton(
+              onPressed: () async {
+                _showLogoutConfirmation(context, ref);
+              },
+              style: TextButton.styleFrom(
+                foregroundColor: Colors.red,
+              ),
+              child: Text(
+                'Sign Out',
+                style: GoogleFonts.roboto(fontWeight: FontWeight.w600),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildInfoCard(String title, List<Widget> children) {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              title,
+              style: GoogleFonts.roboto(
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            const SizedBox(height: 16),
+            ...children,
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildInfoRow(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            width: 100,
+            child: Text(
+              label,
+              style: GoogleFonts.roboto(
+                fontWeight: FontWeight.w500,
+                color: Colors.grey[600],
+              ),
+            ),
+          ),
+          Expanded(
+            child: Text(
+              value,
+              style: GoogleFonts.roboto(),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  String _formatDate(DateTime date) {
+    return '${date.day}/${date.month}/${date.year}';
+  }
+
+  void _showEditProfileDialog(BuildContext context, user, WidgetRef ref) {
+    // Implementation for edit profile dialog
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Edit Profile',
+            style: GoogleFonts.roboto(fontWeight: FontWeight.w600)),
+        content:
+            const Text('Edit profile functionality will be implemented here.'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Save'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showChangePasswordDialog(BuildContext context, WidgetRef ref) {
+    // Implementation for change password dialog
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Change Password',
+            style: GoogleFonts.roboto(fontWeight: FontWeight.w600)),
+        content: const Text(
+            'Change password functionality will be implemented here.'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Update'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showLogoutConfirmation(BuildContext context, WidgetRef ref) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Sign Out',
+            style: GoogleFonts.roboto(fontWeight: FontWeight.w600)),
+        content: const Text('Are you sure you want to sign out?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              await ref.read(authServiceProvider).signOut();
+              if (context.mounted) {
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                  '/login',
+                  (route) => false,
+                );
+              }
+            },
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+            child: const Text('Sign Out'),
+          ),
+        ],
+      ),
+    );
+  }
+}

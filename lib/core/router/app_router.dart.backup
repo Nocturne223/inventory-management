@@ -1,0 +1,113 @@
+im// import '../../features/auth/presentation/pages/login_page.dart';
+// import '../../features/inventory/presentation/pages/inventory_list_page.dart';
+// import '../../features/inventory/presentation/pages/add_component_page.dart';
+// import '../../features/inventory/presentation/pages/component_detail_page.dart';
+// import '../../features/analytics/presentation/pages/analytics_page.dart';
+// import '../../features/deployment/presentation/pages/deployment_page.dart';
+// import '../../features/laboratory/presentation/pages/laboratory_page.dart';
+// import '../../features/maintenance/presentation/pages/maintenance_page.dart';ckage:flutter/material.dart';
+import '../../features/auth/presentation/pages/login_page.dart';
+import '../../features/dashboard/presentation/pages/dashboard_page.dart';
+import '../../features/inventory/presentation/pages/inventory_list_page.dart';
+import '../../features/inventory/presentation/pages/add_component_page.dart';
+import '../../features/inventory/presentation/pages/component_detail_page.dart';
+import '../../features/analytics/presentation/pages/analytics_page.dart';
+import '../../features/deployment/presentation/pages/deployment_page.dart';
+import '../../features/laboratory/presentation/pages/laboratory_page.dart';
+import '../../features/maintenance/presentation/pages/maintenance_page.dart';
+// import '../../features/profile/presentation/pages/profile_page.dart';
+
+class AppRouter {
+  static const String login = '/login';
+  static const String dashboard = '/dashboard';
+  static const String inventory = '/inventory';
+  static const String addComponent = '/add-component';
+  static const String componentDetail = '/component-detail';
+  static const String analytics = '/analytics';
+  static const String deployment = '/deployment';
+  static const String laboratory = '/laboratory';
+  static const String maintenance = '/maintenance';
+  static const String profile = '/profile';
+
+  static Route<dynamic>? onGenerateRoute(RouteSettings settings) {
+    switch (settings.name) {
+      case login:
+        return MaterialPageRoute(
+          builder: (_) => const LoginPage(),
+        );
+
+      case dashboard:
+        return MaterialPageRoute(
+          builder: (_) => const DashboardPage(),
+        );
+
+      case inventory:
+        return MaterialPageRoute(
+          builder: (_) => const InventoryListPage(),
+        );
+
+      case addComponent:
+        final args = settings.arguments as Map<String, dynamic>?;
+        return MaterialPageRoute(
+          builder: (_) => AddComponentPage(
+            category: args?['category'],
+            componentId: args?['componentId'],
+          ),
+        );
+
+      case componentDetail:
+        final componentId = settings.arguments as String;
+        return MaterialPageRoute(
+          builder: (_) => ComponentDetailPage(componentId: componentId),
+        );
+
+      case analytics:
+        return MaterialPageRoute(
+          builder: (_) => const AnalyticsPage(),
+        );
+
+      case deployment:
+        return MaterialPageRoute(
+          builder: (_) => const DeploymentPage(),
+        );
+
+      case laboratory:
+        return MaterialPageRoute(
+          builder: (_) => const LaboratoryPage(),
+        );
+
+      case maintenance:
+        return MaterialPageRoute(
+          builder: (_) => const MaintenancePage(),
+        );
+
+      case profile:
+        return MaterialPageRoute(
+          builder: (_) => const ProfilePage(),
+        );
+
+      default:
+        return MaterialPageRoute(
+          builder: (_) => const Scaffold(
+            body: Center(
+              child: Text('Page not found'),
+            ),
+          ),
+        );
+    }
+  }
+}
+
+// Route names for easy access
+class RouteNames {
+  static const String login = AppRouter.login;
+  static const String dashboard = AppRouter.dashboard;
+  static const String inventory = AppRouter.inventory;
+  static const String addComponent = AppRouter.addComponent;
+  static const String componentDetail = AppRouter.componentDetail;
+  static const String analytics = AppRouter.analytics;
+  static const String deployment = AppRouter.deployment;
+  static const String laboratory = AppRouter.laboratory;
+  static const String maintenance = AppRouter.maintenance;
+  static const String profile = AppRouter.profile;
+}
