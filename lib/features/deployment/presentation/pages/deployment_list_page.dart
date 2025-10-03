@@ -222,7 +222,7 @@ class _StatisticsRow extends StatelessWidget {
         Expanded(
           child: _StatCard(
             title: 'Total',
-            value: stats['totalDeployments']?.toString() ?? '0',
+            value: stats['total']?.toString() ?? '0',
             icon: Icons.inventory_2,
             color: Colors.blue,
           ),
@@ -231,7 +231,7 @@ class _StatisticsRow extends StatelessWidget {
         Expanded(
           child: _StatCard(
             title: 'Active',
-            value: stats['activeDeployments']?.toString() ?? '0',
+            value: stats['active']?.toString() ?? '0',
             icon: Icons.play_circle_filled,
             color: Colors.green,
           ),
@@ -240,7 +240,7 @@ class _StatisticsRow extends StatelessWidget {
         Expanded(
           child: _StatCard(
             title: 'Overdue',
-            value: stats['overdueDeployments']?.toString() ?? '0',
+            value: stats['overdue']?.toString() ?? '0',
             icon: Icons.warning,
             color: Colors.red,
           ),
@@ -248,8 +248,8 @@ class _StatisticsRow extends StatelessWidget {
         const SizedBox(width: 12),
         Expanded(
           child: _StatCard(
-            title: 'Returned',
-            value: stats['returnedDeployments']?.toString() ?? '0',
+            title: 'Completed',
+            value: stats['completed']?.toString() ?? '0',
             icon: Icons.check_circle,
             color: Colors.grey,
           ),
@@ -364,6 +364,61 @@ class _DeploymentCard extends StatelessWidget {
                     ),
                   ),
                   _StatusChip(deployment: deployment),
+                  const SizedBox(width: 8),
+                  // Action Menu
+                  PopupMenuButton<String>(
+                    icon: const Icon(Icons.more_vert, size: 20),
+                    onSelected: (value) {
+                      switch (value) {
+                        case 'edit':
+                          Navigator.pushNamed(
+                            context,
+                            '/deployments/edit',
+                            arguments: deployment,
+                          );
+                          break;
+                        case 'return':
+                          _showReturnDialog(context, deployment);
+                          break;
+                        case 'delete':
+                          _showDeleteDialog(context, deployment);
+                          break;
+                      }
+                    },
+                    itemBuilder: (context) => [
+                      const PopupMenuItem(
+                        value: 'edit',
+                        child: Row(
+                          children: [
+                            Icon(Icons.edit, size: 16),
+                            SizedBox(width: 8),
+                            Text('Edit'),
+                          ],
+                        ),
+                      ),
+                      if (deployment.status == 'active')
+                        const PopupMenuItem(
+                          value: 'return',
+                          child: Row(
+                            children: [
+                              Icon(Icons.keyboard_return, size: 16),
+                              SizedBox(width: 8),
+                              Text('Return Item'),
+                            ],
+                          ),
+                        ),
+                      const PopupMenuItem(
+                        value: 'delete',
+                        child: Row(
+                          children: [
+                            Icon(Icons.delete, size: 16, color: Colors.red),
+                            SizedBox(width: 8),
+                            Text('Delete', style: TextStyle(color: Colors.red)),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ],
               ),
               const SizedBox(height: 8),
@@ -443,6 +498,85 @@ class _DeploymentCard extends StatelessWidget {
     if (days == 0) return 'Today';
     if (days == 1) return '1 day';
     return '$days days';
+  }
+
+  void _showReturnDialog(BuildContext context, Deployment deployment) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Return Item'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+                'Are you sure you want to mark "${deployment.itemName}" as returned?'),
+            const SizedBox(height: 16),
+            const Text(
+                'Note: This action will update the item status and close the deployment.'),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Cancel'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              // TODO: Implement return functionality
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Return functionality not implemented yet'),
+                  backgroundColor: Colors.orange,
+                ),
+              );
+            },
+            child: const Text('Return'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showDeleteDialog(BuildContext context, Deployment deployment) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Delete Deployment'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+                'Are you sure you want to delete the deployment of "${deployment.itemName}"?'),
+            const SizedBox(height: 16),
+            const Text(
+              'This action cannot be undone.',
+              style: TextStyle(color: Colors.red, fontWeight: FontWeight.w600),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Cancel'),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+            onPressed: () {
+              Navigator.of(context).pop();
+              // TODO: Implement delete functionality
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Delete functionality not implemented yet'),
+                  backgroundColor: Colors.red,
+                ),
+              );
+            },
+            child: const Text('Delete', style: TextStyle(color: Colors.white)),
+          ),
+        ],
+      ),
+    );
   }
 }
 

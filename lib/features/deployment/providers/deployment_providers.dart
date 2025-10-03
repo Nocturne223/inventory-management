@@ -1,7 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../services/deployment_service.dart';
-import '../../../services/mock_inventory_service.dart';
-import '../../../services/firestore_inventory_service.dart';
+import '../../../services/firestore_data_service.dart';
 import '../../../core/models/deployment_models.dart';
 import '../../../core/models/inventory_models.dart';
 
@@ -10,9 +9,9 @@ final deploymentServiceProvider = Provider<DeploymentService>((ref) {
   return DeploymentService();
 });
 
-// Keep mock inventory service for departments and locations
-final inventoryServiceProvider = Provider<MockInventoryService>((ref) {
-  return MockInventoryService();
+// Use centralized Firestore data service
+final dataServiceProvider = Provider<FirestoreDataService>((ref) {
+  return FirestoreDataService();
 });
 
 // Deployment Providers
@@ -44,26 +43,25 @@ final deploymentHistoryProvider =
 });
 
 final deploymentStatsProvider = FutureProvider<Map<String, dynamic>>((ref) {
-  final service = ref.watch(deploymentServiceProvider);
+  final service = ref.watch(dataServiceProvider);
   return service.getDeploymentStats();
 });
 
 // Available Items for Deployment (items with status 'AVAILABLE')
-// Now using Firestore instead of mock data
+// Now using centralized Firestore data service
 final availableItemsProvider = StreamProvider<List<InventoryItem>>((ref) {
-  final service = ref.watch(firestoreInventoryServiceProvider);
-  return service
-      .getItemsByStatus('AVAILABLE'); // Use uppercase to match actual data
+  final service = ref.watch(dataServiceProvider);
+  return service.getItemsByStatus('AVAILABLE');
 });
 
-// Departments and Locations for Deployment
+// Departments and Locations for Deployment - now using real Firestore data
 final departmentsProvider = StreamProvider<List<Department>>((ref) {
-  final service = ref.watch(inventoryServiceProvider);
+  final service = ref.watch(dataServiceProvider);
   return service.getDepartments();
 });
 
 final locationsProvider = StreamProvider<List<Location>>((ref) {
-  final service = ref.watch(inventoryServiceProvider);
+  final service = ref.watch(dataServiceProvider);
   return service.getLocations();
 });
 

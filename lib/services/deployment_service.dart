@@ -10,7 +10,7 @@ class DeploymentService {
   CollectionReference get _deploymentHistoryCollection =>
       _firestore.collection('deployment_history');
   CollectionReference get _inventoryItemsCollection =>
-      _firestore.collection('inventory_items');
+      _firestore.collection('items');
 
   // Create a new deployment
   Future<String> createDeployment(Deployment deployment) async {
@@ -146,7 +146,7 @@ class DeploymentService {
         final currentData = deploymentDoc.data() as Map<String, dynamic>;
         final updatedData = {
           ...updates,
-          'updatedAt': DateTime.now().toIso8601String(),
+          'updatedAt': FieldValue.serverTimestamp(),
         };
 
         transaction.update(deploymentRef, updatedData);

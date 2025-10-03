@@ -4,10 +4,12 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/foundation.dart';
 import '../../../../providers/auth_provider.dart';
+import '../../../../services/firestore_data_service.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/models/user.dart';
 import '../../../inventory/presentation/pages/inventory_list_page_new.dart'
     as new_inventory;
+import '../../../inventory/presentation/pages/add_item_page.dart';
 import '../../../deployment/presentation/pages/deployment_list_page.dart';
 // import '../../../analytics/presentation/pages/analytics_page.dart';
 // import '../../../laboratory/presentation/pages/laboratory_page.dart';
@@ -30,7 +32,8 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
 
   final List<Widget> _pages = [
     const DashboardHome(),
-    const new_inventory.InventoryListPage(), // Use the new inventory page
+    const new_inventory.InventoryListPage(
+        showAppBar: false), // Use the new inventory page without AppBar
     const DeploymentListPage(),
     const _PlaceholderPage(title: 'Laboratory'),
     const _PlaceholderPage(title: 'Maintenance'),
@@ -141,9 +144,15 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
       floatingActionButton: _selectedIndex == 1 // Only show on Inventory page
           ? FloatingActionButton(
               onPressed: () {
-                Navigator.pushNamed(context, '/add-component');
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const AddItemPage(),
+                  ),
+                );
               },
               child: const Icon(Icons.add),
+              tooltip: 'Add New Item',
             )
           : null,
     );
@@ -156,6 +165,8 @@ class DashboardHome extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currentUser = ref.watch(mockCurrentUserProvider);
+    final inventoryStats = ref.watch(inventoryStatsProvider);
+    final deploymentStats = ref.watch(deploymentStatsProvider);
 
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
@@ -206,50 +217,102 @@ class DashboardHome extends ConsumerWidget {
           ),
           const SizedBox(height: 24),
 
-          // Stats cards
-          const Row(
+          // Stats cards - now using real Firestore data
+          Row(
             children: [
               Expanded(
-                child: DashboardStatsCard(
-                  title: 'Total Components',
-                  value: '1,245',
-                  icon: Icons.inventory_2,
-                  color: Colors.blue,
-                  trend: '+12%',
+                child: inventoryStats.when(
+                  data: (stats) => DashboardStatsCard(
+                    title: 'Total Items',
+                    value: '${stats['total'] ?? 0}',
+                    icon: Icons.inventory_2,
+                    color: Colors.blue,
+                  ),
+                  loading: () => const DashboardStatsCard(
+                    title: 'Total Items',
+                    value: '...',
+                    icon: Icons.inventory_2,
+                    color: Colors.blue,
+                  ),
+                  error: (_, __) => const DashboardStatsCard(
+                    title: 'Total Items',
+                    value: 'Error',
+                    icon: Icons.inventory_2,
+                    color: Colors.blue,
+                  ),
                 ),
               ),
-              SizedBox(width: 16),
+              const SizedBox(width: 16),
               Expanded(
-                child: DashboardStatsCard(
-                  title: 'Active Deployments',
-                  value: '48',
-                  icon: Icons.send,
-                  color: Colors.green,
-                  trend: '+8%',
+                child: deploymentStats.when(
+                  data: (stats) => DashboardStatsCard(
+                    title: 'Active Deployments',
+                    value: '${stats['active'] ?? 0}',
+                    icon: Icons.send,
+                    color: Colors.green,
+                  ),
+                  loading: () => const DashboardStatsCard(
+                    title: 'Active Deployments',
+                    value: '...',
+                    icon: Icons.send,
+                    color: Colors.green,
+                  ),
+                  error: (_, __) => const DashboardStatsCard(
+                    title: 'Active Deployments',
+                    value: 'Error',
+                    icon: Icons.send,
+                    color: Colors.green,
+                  ),
                 ),
               ),
             ],
           ),
           const SizedBox(height: 16),
-          const Row(
+          Row(
             children: [
               Expanded(
-                child: DashboardStatsCard(
-                  title: 'Available',
-                  value: '298',
-                  icon: Icons.check_circle,
-                  color: Colors.orange,
-                  trend: '-3%',
+                child: inventoryStats.when(
+                  data: (stats) => DashboardStatsCard(
+                    title: 'Available',
+                    value: '${stats['available'] ?? 0}',
+                    icon: Icons.check_circle,
+                    color: Colors.orange,
+                  ),
+                  loading: () => const DashboardStatsCard(
+                    title: 'Available',
+                    value: '...',
+                    icon: Icons.check_circle,
+                    color: Colors.orange,
+                  ),
+                  error: (_, __) => const DashboardStatsCard(
+                    title: 'Available',
+                    value: 'Error',
+                    icon: Icons.check_circle,
+                    color: Colors.orange,
+                  ),
                 ),
               ),
-              SizedBox(width: 16),
+              const SizedBox(width: 16),
               Expanded(
-                child: DashboardStatsCard(
-                  title: 'Overdue Returns',
-                  value: '7',
-                  icon: Icons.warning,
-                  color: Colors.red,
-                  trend: '+2',
+                child: deploymentStats.when(
+                  data: (stats) => DashboardStatsCard(
+                    title: 'Overdue Returns',
+                    value: '${stats['overdue'] ?? 0}',
+                    icon: Icons.warning,
+                    color: Colors.red,
+                  ),
+                  loading: () => const DashboardStatsCard(
+                    title: 'Overdue Returns',
+                    value: '...',
+                    icon: Icons.warning,
+                    color: Colors.red,
+                  ),
+                  error: (_, __) => const DashboardStatsCard(
+                    title: 'Overdue Returns',
+                    value: 'Error',
+                    icon: Icons.warning,
+                    color: Colors.red,
+                  ),
                 ),
               ),
             ],

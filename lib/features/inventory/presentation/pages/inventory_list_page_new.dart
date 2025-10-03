@@ -3,11 +3,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../providers/inventory_providers.dart';
 import '../../../../core/models/inventory_models.dart';
-import 'add_item_page.dart';
+import '../../../deployment/providers/deployment_providers.dart'
+    show dataServiceProvider;
 import 'item_detail_page.dart';
 
 class InventoryListPage extends ConsumerStatefulWidget {
-  const InventoryListPage({super.key});
+  final bool showAppBar;
+
+  const InventoryListPage({
+    super.key,
+    this.showAppBar = true,
+  });
 
   @override
   ConsumerState<InventoryListPage> createState() => _InventoryListPageState();
@@ -30,31 +36,19 @@ class _InventoryListPageState extends ConsumerState<InventoryListPage> {
     final departments = ref.watch(departmentsProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'Inventory Management',
-          style: GoogleFonts.inter(
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        elevation: 0,
-        backgroundColor: Theme.of(context).colorScheme.surface,
-        foregroundColor: Theme.of(context).colorScheme.onSurface,
-        actions: [
-          IconButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const AddItemPage(),
+      appBar: widget.showAppBar
+          ? AppBar(
+              title: Text(
+                'Inventory Management',
+                style: GoogleFonts.inter(
+                  fontWeight: FontWeight.w600,
                 ),
-              );
-            },
-            icon: const Icon(Icons.add),
-            tooltip: 'Add New Item',
-          ),
-        ],
-      ),
+              ),
+              elevation: 0,
+              backgroundColor: Theme.of(context).colorScheme.surface,
+              foregroundColor: Theme.of(context).colorScheme.onSurface,
+            )
+          : null,
       body: Column(
         children: [
           // Search and Filters Section
@@ -132,11 +126,37 @@ class _InventoryListPageState extends ConsumerState<InventoryListPage> {
                       // Department Filter
                       departments.when(
                         data: (deptList) {
-                          final deptNames =
-                              ['All'] + deptList.map((d) => d.name).toList();
+                          // Ensure unique department names to prevent dropdown errors
+                          final uniqueDeptNames = <String>{'All'};
+                          for (final dept in deptList) {
+                            uniqueDeptNames.add(dept.name);
+                          }
+                          final deptNames = uniqueDeptNames.toList();
+
+                          final currentFilter =
+                              ref.watch(departmentFilterProvider);
+
+                          // Determine the display value for the dropdown
+                          String displayValue;
+                          if (currentFilter == 'All') {
+                            displayValue = 'All';
+                          } else {
+                            // Try to find department by ID first, then by name
+                            final deptById =
+                                deptList.where((d) => d.id == currentFilter);
+                            if (deptById.isNotEmpty) {
+                              displayValue = deptById.first.name;
+                            } else {
+                              // Check if the current filter is already a name
+                              displayValue = deptNames.contains(currentFilter)
+                                  ? currentFilter
+                                  : 'All';
+                            }
+                          }
+
                           return _FilterDropdown(
                             label: 'Department',
-                            value: ref.watch(departmentFilterProvider),
+                            value: displayValue,
                             items: deptNames,
                             onChanged: (value) {
                               if (value == 'All') {
@@ -144,11 +164,13 @@ class _InventoryListPageState extends ConsumerState<InventoryListPage> {
                                     .read(departmentFilterProvider.notifier)
                                     .state = 'All';
                               } else {
-                                final dept =
-                                    deptList.firstWhere((d) => d.name == value);
-                                ref
-                                    .read(departmentFilterProvider.notifier)
-                                    .state = dept.id;
+                                final matchingDepts =
+                                    deptList.where((d) => d.name == value);
+                                if (matchingDepts.isNotEmpty) {
+                                  ref
+                                      .read(departmentFilterProvider.notifier)
+                                      .state = matchingDepts.first.id;
+                                }
                               }
                             },
                           );
@@ -353,7 +375,52 @@ class _InventoryItemCard extends ConsumerWidget {
                       ],
                     ),
                   ),
-                  _StatusChip(status: item.status),
+                  Row(
+                    children: [
+                      _StatusChip(status: item.status),
+                      const SizedBox(width: 8),
+                      PopupMenuButton<String>(
+                        onSelected: (value) {
+                          switch (value) {
+                            case 'edit':
+                              Navigator.pushNamed(
+                                context,
+                                '/inventory/edit',
+                                arguments: item,
+                              );
+                              break;
+                            case 'delete':
+                              _showDeleteDialog(context, ref, item);
+                              break;
+                          }
+                        },
+                        itemBuilder: (context) => [
+                          const PopupMenuItem(
+                            value: 'edit',
+                            child: Row(
+                              children: [
+                                Icon(Icons.edit, size: 18),
+                                SizedBox(width: 8),
+                                Text('Edit'),
+                              ],
+                            ),
+                          ),
+                          const PopupMenuItem(
+                            value: 'delete',
+                            child: Row(
+                              children: [
+                                Icon(Icons.delete, size: 18, color: Colors.red),
+                                SizedBox(width: 8),
+                                Text('Delete',
+                                    style: TextStyle(color: Colors.red)),
+                              ],
+                            ),
+                          ),
+                        ],
+                        child: const Icon(Icons.more_vert),
+                      ),
+                    ],
+                  ),
                 ],
               ),
               const SizedBox(height: 12),
@@ -413,6 +480,52 @@ class _InventoryItemCard extends ConsumerWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  void _showDeleteDialog(
+      BuildContext context, WidgetRef ref, InventoryItem item) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Delete Item'),
+        content: Text('Are you sure you want to delete "${item.name}"?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () async {
+              try {
+                final dataService = ref.read(dataServiceProvider);
+                await dataService.deleteItem(item.id);
+
+                if (context.mounted) {
+                  Navigator.pop(context);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Item deleted successfully'),
+                      backgroundColor: Colors.green,
+                    ),
+                  );
+                }
+              } catch (e) {
+                if (context.mounted) {
+                  Navigator.pop(context);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Error deleting item: $e'),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                }
+              }
+            },
+            child: const Text('Delete', style: TextStyle(color: Colors.red)),
+          ),
+        ],
       ),
     );
   }

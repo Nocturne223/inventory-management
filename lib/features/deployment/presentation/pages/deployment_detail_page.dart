@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../providers/deployment_providers.dart';
 import '../../../../core/models/deployment_models.dart';
 import '../../../../providers/auth_provider.dart';
+import 'edit_deployment_page.dart';
 
 class DeploymentDetailPage extends ConsumerWidget {
   final String deploymentId;
@@ -178,9 +179,11 @@ class DeploymentDetailPage extends ConsumerWidget {
         _showReturnDialog(context, ref, deployment);
         break;
       case 'edit':
-        // TODO: Navigate to edit page
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Edit functionality coming soon')),
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => EditDeploymentPage(deployment: deployment),
+          ),
         );
         break;
     }
