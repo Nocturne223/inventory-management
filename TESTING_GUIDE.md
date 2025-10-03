@@ -9,9 +9,9 @@ https://inventory-management-aefea.web.app
 ### **1. Authentication Test**
 
 - [ ] Visit the live URL
-- [ ] See the login page with MIT branding
+- [ ] See the login page with AssetFlow branding
 - [ ] Click "Create Admin User" (if not done yet)
-- [ ] Login with: `admin@mit.edu` / `MITAdmin123!`
+- [ ] Login with your admin credentials
 - [ ] Successfully reach the dashboard
 
 ### **2. Dashboard Test**
@@ -19,12 +19,12 @@ https://inventory-management-aefea.web.app
 - [ ] See welcome message and statistics cards
 - [ ] Statistics show 0 or existing data counts
 - [ ] Responsive design works on mobile/desktop
-- [ ] Three dots menu visible in debug mode
+- [ ] Admin menu visible for SuperAdmin users
 
 ### **3. Data Management Test**
 
 - [ ] Press `F12` to open Developer Tools
-- [ ] Click three dots menu → "Data Management"
+- [ ] Click admin menu → "Data Management"
 - [ ] See current data statistics
 - [ ] Click "Add Sample Data"
 - [ ] See success message

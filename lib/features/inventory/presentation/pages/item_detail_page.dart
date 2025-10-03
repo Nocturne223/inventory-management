@@ -25,22 +25,6 @@ class ItemDetailPage extends ConsumerWidget {
           'Item Details',
           style: GoogleFonts.inter(fontWeight: FontWeight.w600),
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.edit),
-            onPressed: () {
-              final item = itemStream.value;
-              if (item != null) {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => EditItemPage(item: item),
-                  ),
-                );
-              }
-            },
-          ),
-        ],
       ),
       body: itemStream.when(
         data: (item) {
@@ -177,10 +161,10 @@ class ItemDetailPage extends ConsumerWidget {
                     Expanded(
                       child: ElevatedButton.icon(
                         onPressed: () {
-                          // TODO: Implement edit functionality
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Edit functionality coming soon'),
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => EditItemPage(item: item),
                             ),
                           );
                         },

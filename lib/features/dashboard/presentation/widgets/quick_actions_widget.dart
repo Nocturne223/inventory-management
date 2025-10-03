@@ -93,16 +93,7 @@ class QuickActionsWidget extends ConsumerWidget {
                 ),
               ),
               const SizedBox(width: 12),
-              Expanded(
-                child: _QuickActionButton(
-                  icon: Icons.analytics,
-                  label: 'View Reports',
-                  color: Colors.orange,
-                  onTap: () {
-                    Navigator.pushNamed(context, '/analytics');
-                  },
-                ),
-              ),
+              const Expanded(child: SizedBox()), // Empty space
             ],
           ),
         ],

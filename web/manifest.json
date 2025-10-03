@@ -1,11 +1,11 @@
 {
-    "name": "inventory_management",
-    "short_name": "inventory_management",
+    "name": "AssetFlow Inventory & Deployment System",
+    "short_name": "AssetFlow",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "description": "AssetFlow Inventory & Deployment System - Streamlining IT asset management for educational institutions.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

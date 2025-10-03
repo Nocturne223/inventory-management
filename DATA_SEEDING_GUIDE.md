@@ -15,8 +15,7 @@ I've updated your Firestore security rules to allow authenticated users to read 
 
 2. **Access Data Management:**
 
-   - Press `F12` or `Ctrl+Shift+I` to open Developer Tools
-   - Look for the **three dots menu (⋮)** in the top-right corner of the dashboard
+   - Look for the **Admin menu** in the top-right corner of the dashboard (SuperAdmin users only)
    - Click **"Data Management"**
 
 3. **Seed Sample Data:**

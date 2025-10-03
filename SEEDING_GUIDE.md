@@ -2,7 +2,7 @@
 
 ## Overview
 
-The user seeding script creates 10 diverse test users for the MIT Inventory Management System with proper role distribution and permissions.
+The user seeding script creates 10 diverse test users for the AssetFlow Inventory & Deployment System with proper role distribution and permissions.
 
 ## Quick Execution
 

@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document contains information about the 10 test users created for the MIT IT Inventory Management System. These users represent different roles and permission levels for comprehensive testing.
+This document contains information about the 10 test users created for the AssetFlow Inventory & Deployment System. These users represent different roles and permission levels for comprehensive testing.
 
 ## User Accounts
 
@@ -296,4 +296,4 @@ dart seed_10_users.dart
 - **Login tracking** includes realistic last login times
 - **Departments** represent different organizational units
 
-This setup provides comprehensive testing coverage for all role-based features and user management scenarios in the MIT IT Inventory Management System.
+This setup provides comprehensive testing coverage for all role-based features and user management scenarios in the AssetFlow Inventory & Deployment System.

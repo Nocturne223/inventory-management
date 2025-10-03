@@ -300,6 +300,8 @@ class _LaboratoryEquipmentManagementPageState
                   'Expected return: ${_formatDate(deployment.expectedReturnDate!)}'),
           ],
         ),
+        // PopupMenuButton commented out temporarily - Equipment management actions
+        /*
         trailing: PopupMenuButton<String>(
           itemBuilder: (context) => [
             const PopupMenuItem(
@@ -330,6 +332,7 @@ class _LaboratoryEquipmentManagementPageState
           ],
           onSelected: (value) => _handleDeploymentAction(value, deployment),
         ),
+        */
         isThreeLine: true,
       ),
     );
@@ -433,6 +436,8 @@ class _LaboratoryEquipmentManagementPageState
     );
   }
 
+  // _handleDeploymentAction method commented out along with popup menu
+  /*
   void _handleDeploymentAction(String action, Deployment deployment) {
     switch (action) {
       case 'view':
@@ -452,7 +457,10 @@ class _LaboratoryEquipmentManagementPageState
         break;
     }
   }
+  */
 
+  // _returnEquipment and _reassignEquipment methods commented out along with popup menu
+  /*
   void _returnEquipment(Deployment deployment) {
     showDialog(
       context: context,
@@ -492,6 +500,7 @@ class _LaboratoryEquipmentManagementPageState
       ),
     );
   }
+  */
 
   void _deployEquipment(InventoryItem item) {
     showDialog(

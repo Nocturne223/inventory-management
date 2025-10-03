@@ -1,10 +1,10 @@
-# 📋 MIT College IT Inventory Management System
+# 📋 AssetFlow Inventory & Deployment System
 
 A comprehensive Flutter-based inventory management system designed specifically for college IT departments. This application provides robust tracking, deployment analytics, and maintenance management for IT equipment and components.
 
 ## 🎯 Project Overview
 
-**Purpose**: Complete inventory management solution for MIT College IT Department
+**Purpose**: Complete inventory management solution for AssetFlow Inventory & Deployment System
 **Context**: Component tracking, deployment analytics, and laboratory management
 **Technology**: Flutter frontend with Firebase/Firestore backend
 
@@ -14,7 +14,7 @@ A comprehensive Flutter-based inventory management system designed specifically 
 
 - **Component Lifecycle Tracking**: Full lifecycle from acquisition to disposal
 - **Real-time Status Updates**: Available, Deployed, Maintenance, Damaged, Disposed
-- **QR Code Integration**: Generate and scan QR codes for quick component identification
+- **QR Code Integration**: Generate QR codes for quick component identification
 - **Asset Tagging System**: Unique asset tags for institutional tracking
 
 ### 🔍 Advanced Search & Filtering
@@ -33,7 +33,7 @@ A comprehensive Flutter-based inventory management system designed specifically 
 
 ### 📊 Deployment Analytics
 
-- **Usage Patterns**: Track component deployment history and usage trends
+- **Usage Patterns**: Track component deployment and usage trends
 - **Utilization Metrics**: Analyze equipment utilization rates
 - **Deployment Workflow**: Streamlined process for equipment deployment
 - **Return Management**: Track and manage equipment returns
@@ -49,8 +49,6 @@ A comprehensive Flutter-based inventory management system designed specifically 
 
 - **Component Distribution Charts**: Visual representation of inventory composition
 - **Utilization Reports**: Equipment usage and efficiency analytics
-- **Financial Reporting**: Cost tracking and budget analysis
-- **Trend Analysis**: Historical data analysis and forecasting
 
 ### 👥 User Management & Permissions
 
@@ -67,15 +65,13 @@ A comprehensive Flutter-based inventory management system designed specifically 
 - **Language**: Dart
 - **UI Components**: Material Design 3
 - **State Management**: Riverpod
-- **Charts**: FL Chart & Syncfusion Charts
-- **QR Code**: QR Flutter & QR Code Scanner
+- **Charts**: FL Chart
+- **QR Code**: QR Flutter for code generation
 
 ### Backend (Firebase)
 
 - **Database**: Cloud Firestore
 - **Authentication**: Firebase Auth
-- **Storage**: Firebase Storage
-- **Analytics**: Firebase Analytics
 
 ### Development Tools
 
@@ -181,13 +177,9 @@ lib/
    - Add sample components and laboratories for testing
    - Import existing inventory data if available
 
-## 🔐 Authentication & Demo Accounts
+## 🔐 Authentication
 
-The application includes demo accounts for testing:
-
-- **Admin**: admin@mit.edu / admin123
-- **Manager**: manager@mit.edu / manager123
-- **User**: user@mit.edu / user123
+The application requires user authentication. Admin users can be created through the system interface, and additional users can be managed through the user management interface.
 
 ## 📱 Key Screens & Functionality
 
@@ -195,7 +187,7 @@ The application includes demo accounts for testing:
 
 - Welcome message with user information
 - Key metrics: Total Components, Deployed, Available, Maintenance
-- Quick actions: Add Component, Scan QR, View Reports, Settings
+- Quick actions: Add Item, Create Deployment, Seed Data
 - Recent activities feed
 - Component distribution charts
 
@@ -258,4 +250,4 @@ For bug reports and feature requests, please create an issue in the repository.
 
 ---
 
-**MIT College IT Inventory Management System** - Streamlining IT asset management for educational institutions.
+**AssetFlow Inventory & Deployment System** - Streamlining IT asset management for educational institutions.

@@ -38,8 +38,6 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
         showAppBar: false), // Use the new inventory page without AppBar
     const DeploymentListPage(),
     const LaboratoryPage(),
-    const _PlaceholderPage(title: 'Maintenance'),
-    const _PlaceholderPage(title: 'Analytics'),
   ];
 
   final List<BottomNavigationBarItem> _bottomNavItems = [
@@ -59,14 +57,6 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
       icon: Icon(Icons.science),
       label: 'Laboratory',
     ),
-    const BottomNavigationBarItem(
-      icon: Icon(Icons.build),
-      label: 'Maintenance',
-    ),
-    const BottomNavigationBarItem(
-      icon: Icon(Icons.analytics),
-      label: 'Analytics',
-    ),
   ];
 
   @override
@@ -74,7 +64,7 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'MIT IT Inventory',
+          'AssetFlow Inventory & Deployment',
           style: GoogleFonts.roboto(
             fontWeight: FontWeight.w600,
           ),
@@ -131,12 +121,6 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
                   ),
                 ],
               );
-            },
-          ),
-          IconButton(
-            icon: const Icon(Icons.notifications),
-            onPressed: () {
-              // Show notifications
             },
           ),
           // Profile Menu
