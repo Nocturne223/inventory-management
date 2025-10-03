@@ -1,0 +1,12 @@
+[
+  {
+    "id": 1,
+    "deployment_id": 42,
+    "item_id": 101,
+    "quantity_requested": 1,
+    "quantity_issued": 1,
+    "quantity_returned": 0,
+    "serial_numbers": null,
+    "notes": ""
+  }
+]

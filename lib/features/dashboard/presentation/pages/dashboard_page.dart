@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter/foundation.dart';
 import '../../../../providers/auth_provider.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/models/user.dart';
@@ -11,6 +12,7 @@ import '../../../../core/models/user.dart';
 // import '../../../laboratory/presentation/pages/laboratory_page.dart';
 // import '../../../maintenance/presentation/pages/maintenance_page.dart';
 // import '../../../profile/presentation/pages/profile_page.dart';
+import '../../../admin/presentation/pages/data_management_page.dart';
 import '../widgets/dashboard_stats_card.dart';
 import '../widgets/recent_activities_widget.dart';
 import '../widgets/quick_actions_widget.dart';
@@ -72,6 +74,33 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
           ),
         ),
         actions: [
+          // Developer menu (only in debug mode)
+          if (kDebugMode)
+            PopupMenuButton<String>(
+              icon: const Icon(Icons.more_vert),
+              onSelected: (value) {
+                if (value == 'data_management') {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const DataManagementPage(),
+                    ),
+                  );
+                }
+              },
+              itemBuilder: (context) => [
+                const PopupMenuItem<String>(
+                  value: 'data_management',
+                  child: Row(
+                    children: [
+                      Icon(Icons.storage),
+                      SizedBox(width: 8),
+                      Text('Data Management'),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           IconButton(
             icon: const Icon(Icons.notifications),
             onPressed: () {

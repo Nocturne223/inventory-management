@@ -1,0 +1,12 @@
+[
+  {
+    "id": 1001,
+    "unit_identifier": "SU-CBA-ZEN1-001",
+    "name": "CBA Lab PC 001",
+    "system_type": "desktop",
+    "configuration_notes": "Intel i5, 8GB RAM",
+    "deployment_id": null,
+    "status": "available",
+    "created_at": "2023-01-04T11:00:00Z"
+  }
+]
