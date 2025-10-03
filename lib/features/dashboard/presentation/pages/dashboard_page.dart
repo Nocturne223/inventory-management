@@ -6,9 +6,10 @@ import 'package:flutter/foundation.dart';
 import '../../../../providers/auth_provider.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/models/user.dart';
-import '../../../inventory/presentation/pages/inventory_list_page_new.dart';
+import '../../../inventory/presentation/pages/inventory_list_page_new.dart'
+    as new_inventory;
+import '../../../deployment/presentation/pages/deployment_list_page.dart';
 // import '../../../analytics/presentation/pages/analytics_page.dart';
-// import '../../../deployment/presentation/pages/deployment_page.dart';
 // import '../../../laboratory/presentation/pages/laboratory_page.dart';
 // import '../../../maintenance/presentation/pages/maintenance_page.dart';
 // import '../../../profile/presentation/pages/profile_page.dart';
@@ -29,8 +30,8 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
 
   final List<Widget> _pages = [
     const DashboardHome(),
-    const InventoryListPage(),
-    const _PlaceholderPage(title: 'Deployment'),
+    const new_inventory.InventoryListPage(), // Use the new inventory page
+    const DeploymentListPage(),
     const _PlaceholderPage(title: 'Laboratory'),
     const _PlaceholderPage(title: 'Maintenance'),
     const _PlaceholderPage(title: 'Analytics'),
@@ -220,11 +221,11 @@ class DashboardHome extends ConsumerWidget {
               SizedBox(width: 16),
               Expanded(
                 child: DashboardStatsCard(
-                  title: 'Deployed',
-                  value: '892',
+                  title: 'Active Deployments',
+                  value: '48',
                   icon: Icons.send,
                   color: Colors.green,
-                  trend: '+5%',
+                  trend: '+8%',
                 ),
               ),
             ],
@@ -244,11 +245,11 @@ class DashboardHome extends ConsumerWidget {
               SizedBox(width: 16),
               Expanded(
                 child: DashboardStatsCard(
-                  title: 'Maintenance',
-                  value: '55',
-                  icon: Icons.build,
+                  title: 'Overdue Returns',
+                  value: '7',
+                  icon: Icons.warning,
                   color: Colors.red,
-                  trend: '+8%',
+                  trend: '+2',
                 ),
               ),
             ],

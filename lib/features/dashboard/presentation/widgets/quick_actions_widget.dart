@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../../../../services/firestore_inventory_service.dart';
 
-class QuickActionsWidget extends StatelessWidget {
+class QuickActionsWidget extends ConsumerWidget {
   const QuickActionsWidget({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -37,11 +39,11 @@ class QuickActionsWidget extends StatelessWidget {
               const SizedBox(width: 12),
               Expanded(
                 child: _QuickActionButton(
-                  icon: Icons.qr_code_scanner,
-                  label: 'Scan QR',
+                  icon: Icons.send,
+                  label: 'Create Deployment',
                   color: Colors.green,
                   onTap: () {
-                    // Navigate to QR scanner
+                    Navigator.pushNamed(context, '/deployments/create');
                   },
                 ),
               ),
@@ -52,22 +54,46 @@ class QuickActionsWidget extends StatelessWidget {
             children: [
               Expanded(
                 child: _QuickActionButton(
-                  icon: Icons.analytics,
-                  label: 'View Reports',
-                  color: Colors.orange,
-                  onTap: () {
-                    Navigator.pushNamed(context, '/analytics');
+                  icon: Icons.cloud_upload,
+                  label: 'Seed Data',
+                  color: Colors.purple,
+                  onTap: () async {
+                    try {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                            content: Text('🌱 Seeding inventory data...')),
+                      );
+
+                      final service =
+                          ref.read(firestoreInventoryServiceProvider);
+                      await service.seedInitialData();
+
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content:
+                              Text('✅ Inventory data seeded successfully!'),
+                          backgroundColor: Colors.green,
+                        ),
+                      );
+                    } catch (e) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('❌ Error seeding data: $e'),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                    }
                   },
                 ),
               ),
               const SizedBox(width: 12),
               Expanded(
                 child: _QuickActionButton(
-                  icon: Icons.settings,
-                  label: 'Settings',
-                  color: Colors.purple,
+                  icon: Icons.analytics,
+                  label: 'View Reports',
+                  color: Colors.orange,
                   onTap: () {
-                    Navigator.pushNamed(context, '/profile');
+                    Navigator.pushNamed(context, '/analytics');
                   },
                 ),
               ),
