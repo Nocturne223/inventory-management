@@ -56,8 +56,10 @@ final filteredInventoryItemsProvider =
 
     // Apply status filter
     if (statusFilter != 'All') {
-      filteredItems =
-          filteredItems.where((item) => item.status == statusFilter).toList();
+      filteredItems = filteredItems
+          .where(
+              (item) => item.status.toLowerCase() == statusFilter.toLowerCase())
+          .toList();
     }
 
     // Apply department filter
@@ -101,10 +103,19 @@ final inventoryStatsProvider = FutureProvider<Map<String, int>>((ref) {
 });
 
 // Category Distribution Provider for Pie Chart
-final categoryDistributionProvider = FutureProvider<Map<String, double>>((ref) {
+final categoryDistributionProvider = StreamProvider<Map<String, double>>((ref) {
   final service = ref.watch(inventoryServiceProvider);
-  return service.getCategoryDistribution();
+  return service.getCategoryDistributionStream();
 });
+
+// Distribution for only currently deployed items
+final deployedCategoryDistributionProvider =
+    StreamProvider<Map<String, double>>((ref) {
+  final service = ref.watch(inventoryServiceProvider);
+  return service.getDeployedCategoryDistributionStream();
+});
+
+// Additional context if needed
 
 // Categories and Statuses Providers
 final categoriesProvider = Provider<List<String>>((ref) {

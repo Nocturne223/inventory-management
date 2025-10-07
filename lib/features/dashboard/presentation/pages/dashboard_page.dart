@@ -17,6 +17,7 @@ import '../../../laboratory/presentation/pages/laboratory_page.dart';
 // import '../../../maintenance/presentation/pages/maintenance_page.dart';
 // import '../../../profile/presentation/pages/profile_page.dart';
 import '../../../admin/presentation/pages/data_management_page.dart';
+import '../../../admin/presentation/pages/department_management_page.dart';
 import '../../../user_management/presentation/pages/user_management_page.dart';
 import '../widgets/dashboard_stats_card.dart';
 import '../widgets/recent_activities_widget.dart';
@@ -28,6 +29,9 @@ class DashboardPage extends ConsumerStatefulWidget {
   @override
   ConsumerState<DashboardPage> createState() => _DashboardPageState();
 }
+
+// 0 = All Items, 1 = Deployed Only
+final _distributionModeProvider = StateProvider<int>((ref) => 0);
 
 class _DashboardPageState extends ConsumerState<DashboardPage> {
   int _selectedIndex = 0;
@@ -96,6 +100,13 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
                         builder: (context) => const UserManagementPage(),
                       ),
                     );
+                  } else if (value == 'department_management') {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const DepartmentManagementPage(),
+                      ),
+                    );
                   }
                 },
                 itemBuilder: (context) => [
@@ -106,6 +117,16 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
                         Icon(Icons.storage),
                         SizedBox(width: 8),
                         Text('Data Management'),
+                      ],
+                    ),
+                  ),
+                  const PopupMenuItem<String>(
+                    value: 'department_management',
+                    child: Row(
+                      children: [
+                        Icon(Icons.business),
+                        SizedBox(width: 8),
+                        Text('Department Management'),
                       ],
                     ),
                   ),
@@ -401,8 +422,11 @@ class DashboardHome extends ConsumerWidget {
     final currentUser = ref.watch(mockCurrentUserProvider);
     final inventoryStats = ref.watch(inventoryStatsProvider);
     final deploymentStats = ref.watch(deploymentStatsProvider);
-    final categoryDistribution =
-        ref.watch(inventory_providers.categoryDistributionProvider);
+    // Toggle state provider for distribution view: 0 = All Items, 1 = Deployed Only
+    final distributionMode = ref.watch(_distributionModeProvider);
+    final categoryDistribution = distributionMode == 0
+        ? ref.watch(inventory_providers.categoryDistributionProvider)
+        : ref.watch(inventory_providers.deployedCategoryDistributionProvider);
 
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
@@ -586,6 +610,35 @@ class DashboardHome extends ConsumerWidget {
               fontSize: 20,
               fontWeight: FontWeight.w600,
             ),
+          ),
+          const SizedBox(height: 8),
+          // Toggle between All Items and Currently Deployed
+          Row(
+            children: [
+              ToggleButtons(
+                isSelected: [distributionMode == 0, distributionMode == 1],
+                onPressed: (index) {
+                  ref.read(_distributionModeProvider.notifier).state = index;
+                },
+                borderRadius: BorderRadius.circular(8),
+                children: const [
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    child: Text('All Items'),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    child: Text('Deployed Only'),
+                  ),
+                ],
+              ),
+              const SizedBox(width: 12),
+              Text(
+                distributionMode == 0 ? 'All Items' : 'Currently Deployed',
+                style:
+                    GoogleFonts.roboto(fontSize: 14, color: Colors.grey[500]),
+              ),
+            ],
           ),
           const SizedBox(height: 16),
           Container(
