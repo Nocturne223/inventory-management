@@ -5,6 +5,12 @@ import '../core/models/inventory_models.dart';
 /// Centralized Firestore service for all collections
 class FirestoreDataService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  // Simple in-memory caches to avoid repeated reads for the same referenced docs
+  final Map<String, String> _departmentCache = {};
+  final Map<String, String> _locationCache = {};
+  final Map<String, String> _itemCache = {};
+  final Map<String, String> _userCache =
+      {}; // key: uid or email -> display name
 
   // ======================
   // DEPARTMENTS COLLECTION
@@ -142,6 +148,215 @@ class FirestoreDataService {
         data['id'] = doc.id;
         return data;
       }).toList();
+    });
+  }
+
+  /// Returns deployments enriched with resolved department/location/user/item names.
+  /// This implementation deduplicates lookups across a snapshot using simple
+  /// in-memory caches to avoid N x M repeated reads.
+  Stream<List<Map<String, dynamic>>> getEnrichedDeployments() {
+    return _firestore
+        .collection('deployments')
+        .orderBy('createdAt', descending: true)
+        .snapshots()
+        .asyncMap((snapshot) async {
+      // Convert docs to mutable maps and collect referenced ids
+      final deployments = snapshot.docs.map((doc) {
+        final data = Map<String, dynamic>.from(doc.data());
+        data['id'] = doc.id;
+        return data;
+      }).toList();
+
+      final deptIds = <String>{};
+      final locIds = <String>{};
+      final itemIds = <String>{};
+      final userIds = <String>{};
+      final userEmails = <String>{};
+
+      for (final d in deployments) {
+        final String? deptId = d['departmentId'] as String?;
+        if (deptId != null &&
+            deptId.isNotEmpty &&
+            !_departmentCache.containsKey(deptId)) {
+          deptIds.add(deptId);
+        }
+
+        final String? locId = d['locationId'] as String?;
+        if (locId != null &&
+            locId.isNotEmpty &&
+            !_locationCache.containsKey(locId)) {
+          locIds.add(locId);
+        }
+
+        final String? itemId = d['itemId'] as String?;
+        if (itemId != null &&
+            itemId.isNotEmpty &&
+            !_itemCache.containsKey(itemId)) {
+          itemIds.add(itemId);
+        }
+
+        final String? deployedBy = d['deployedBy'] as String?;
+        final String? requestedBy = d['requestedBy'] as String?;
+        final String? requestedByEmail = d['requestedByEmail'] as String?;
+
+        void collectUserIdentifier(String? v) {
+          if (v == null || v.isEmpty) return;
+          if (v.contains('@')) {
+            if (!_userCache.containsKey(v)) userEmails.add(v);
+          } else {
+            if (!_userCache.containsKey(v)) userIds.add(v);
+          }
+        }
+
+        collectUserIdentifier(deployedBy);
+        collectUserIdentifier(requestedBy);
+        collectUserIdentifier(requestedByEmail);
+      }
+
+      // Fetch missing departments
+      if (deptIds.isNotEmpty) {
+        final futures = deptIds
+            .map((id) => _firestore.collection('departments').doc(id).get())
+            .toList();
+        final results = await Future.wait(futures);
+        for (final doc in results) {
+          if (doc.exists) {
+            final data = doc.data();
+            _departmentCache[doc.id] = (data != null && data['name'] != null)
+                ? data['name'] as String
+                : 'Unknown Department';
+          } else {
+            _departmentCache[doc.id] = 'Unknown Department';
+          }
+        }
+      }
+
+      // Fetch missing locations
+      if (locIds.isNotEmpty) {
+        final futures = locIds
+            .map((id) => _firestore.collection('locations').doc(id).get())
+            .toList();
+        final results = await Future.wait(futures);
+        for (final doc in results) {
+          if (doc.exists) {
+            final data = doc.data();
+            _locationCache[doc.id] = (data != null && data['name'] != null)
+                ? data['name'] as String
+                : 'Unknown Location';
+          } else {
+            _locationCache[doc.id] = 'Unknown Location';
+          }
+        }
+      }
+
+      // Fetch missing items
+      if (itemIds.isNotEmpty) {
+        final futures = itemIds
+            .map((id) => _firestore.collection('items').doc(id).get())
+            .toList();
+        final results = await Future.wait(futures);
+        for (final doc in results) {
+          if (doc.exists) {
+            final data = doc.data();
+            // attempt common name fields
+            final name =
+                (data != null && (data['name'] ?? data['itemName']) != null)
+                    ? (data['name'] ?? data['itemName']) as String
+                    : 'Item';
+            _itemCache[doc.id] = name;
+          } else {
+            _itemCache[doc.id] = 'Item';
+          }
+        }
+      }
+
+      // Fetch missing user docs by uid
+      if (userIds.isNotEmpty) {
+        final futures = userIds
+            .map((id) => _firestore.collection('users').doc(id).get())
+            .toList();
+        final results = await Future.wait(futures);
+        for (final doc in results) {
+          if (doc.exists) {
+            final u = doc.data();
+            final first = u?['firstName'] ?? '';
+            final last = u?['lastName'] ?? '';
+            final display = (('$first $last').trim().isNotEmpty)
+                ? ('$first $last').trim()
+                : (u?['displayName'] ?? doc.id) as String;
+            _userCache[doc.id] = display;
+          } else {
+            _userCache[doc.id] = doc.id;
+          }
+        }
+      }
+
+      // Fetch missing user docs by email (one query per email). Cache by email and by uid when available
+      if (userEmails.isNotEmpty) {
+        final futures = userEmails.map((email) async {
+          final q = await _firestore
+              .collection('users')
+              .where('email', isEqualTo: email)
+              .limit(1)
+              .get();
+          if (q.docs.isNotEmpty) {
+            final doc = q.docs.first;
+            final u = doc.data();
+            final first = u['firstName'] ?? '';
+            final last = u['lastName'] ?? '';
+            final display = (('$first $last').trim().isNotEmpty)
+                ? ('$first $last').trim()
+                : (u['displayName'] ?? email) as String;
+            // cache by email and uid
+            _userCache[email] = display;
+            _userCache[doc.id] = display;
+          } else {
+            _userCache[email] = email;
+          }
+        }).toList();
+
+        await Future.wait(futures);
+      }
+
+      // Assemble final enriched deployments
+      final enriched = deployments.map((d) {
+        final Map<String, dynamic> out = Map<String, dynamic>.from(d);
+
+        final String? deptId = d['departmentId'] as String?;
+        out['department'] = (deptId != null && deptId.isNotEmpty)
+            ? (_departmentCache[deptId] ?? 'Unknown Department')
+            : (d['department'] as String? ?? 'Unknown Department');
+
+        final String? locId = d['locationId'] as String?;
+        out['location'] = (locId != null && locId.isNotEmpty)
+            ? (_locationCache[locId] ?? 'Unknown Location')
+            : (d['location'] as String? ?? 'Unknown Location');
+
+        final String? itemId = d['itemId'] as String?;
+        out['itemName'] = (d['itemName'] as String?) ??
+            (itemId != null && itemId.isNotEmpty
+                ? (_itemCache[itemId] ?? 'Item')
+                : 'Item');
+
+        String? userIdentifier;
+        if ((d['deployedBy'] as String?)?.isNotEmpty ?? false) {
+          userIdentifier = d['deployedBy'] as String?;
+        } else if ((d['requestedBy'] as String?)?.isNotEmpty ?? false) {
+          userIdentifier = d['requestedBy'] as String?;
+        } else if ((d['requestedByEmail'] as String?)?.isNotEmpty ?? false) {
+          userIdentifier = d['requestedByEmail'] as String?;
+        }
+
+        if (userIdentifier != null && userIdentifier.isNotEmpty) {
+          out['requestedBy'] = _userCache[userIdentifier] ?? userIdentifier;
+        } else {
+          out['requestedBy'] = d['requestedBy'] as String? ?? 'Unknown User';
+        }
+
+        return out;
+      }).toList();
+
+      return enriched;
     });
   }
 
@@ -288,8 +503,10 @@ class FirestoreDataService {
       final status = data['status']?.toString().toLowerCase() ?? '';
 
       if (status == 'active' || status == 'deployed') {
-        // Check if overdue first
-        bool isOverdue = false;
+        // Count all active deployments as active
+        stats['active'] = stats['active']! + 1;
+
+        // Check if this active deployment is also overdue
         final returnDate = data['expectedReturnDate'];
         if (returnDate != null) {
           DateTime? expectedReturn;
@@ -300,14 +517,8 @@ class FirestoreDataService {
           }
 
           if (expectedReturn != null && expectedReturn.isBefore(now)) {
-            isOverdue = true;
             stats['overdue'] = stats['overdue']! + 1;
           }
-        }
-
-        // Only count as active if NOT overdue
-        if (!isOverdue) {
-          stats['active'] = stats['active']! + 1;
         }
       } else if (status == 'overdue') {
         // Deployments with explicit 'overdue' status
@@ -358,6 +569,13 @@ final allDeploymentsProvider =
     StreamProvider<List<Map<String, dynamic>>>((ref) {
   final service = ref.watch(firestoreDataServiceProvider);
   return service.getDeployments();
+});
+
+// Enriched deployments provider (resolves department/location/user names)
+final recentEnrichedDeploymentsProvider =
+    StreamProvider.autoDispose<List<Map<String, dynamic>>>((ref) {
+  final service = ref.watch(firestoreDataServiceProvider);
+  return service.getEnrichedDeployments();
 });
 
 final activeDeploymentsProvider =

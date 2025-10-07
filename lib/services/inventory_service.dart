@@ -3,6 +3,8 @@ import '../../core/models/inventory_models.dart';
 
 class InventoryService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  // Simple in-memory cache for itemId -> category to reduce repeated reads
+  final Map<String, String> _itemCategoryCache = {};
 
   // Inventory Items
   Stream<List<InventoryItem>> getInventoryItems() {
@@ -60,14 +62,13 @@ class InventoryService {
   }
 
   Stream<List<InventoryItem>> getItemsByStatus(String status) {
-    return _firestore
-        .collection('items')
-        .where('status', isEqualTo: status)
-        .orderBy('createdAt', descending: true)
-        .snapshots()
-        .map((snapshot) => snapshot.docs
-            .map((doc) => InventoryItem.fromMap(doc.data(), doc.id))
-            .toList());
+    return _firestore.collection('items').snapshots().map((snapshot) => snapshot
+        .docs
+        .where((doc) =>
+            (doc.data()['status'] ?? '').toString().toLowerCase() ==
+            status.toLowerCase())
+        .map((doc) => InventoryItem.fromMap(doc.data(), doc.id))
+        .toList());
   }
 
   Stream<List<InventoryItem>> getItemsByDepartment(String departmentId) {
@@ -159,7 +160,8 @@ class InventoryService {
     int retired = 0;
 
     for (var doc in items.docs) {
-      final status = doc.data()['status'] ?? 'available';
+      final status =
+          (doc.data()['status'] ?? 'available').toString().toLowerCase();
       switch (status) {
         case 'available':
           available++;
@@ -215,6 +217,89 @@ class InventoryService {
       print('Error getting category distribution: $e');
       return {'Error': 100.0};
     }
+  }
+
+  // Stream-based category distribution for real-time updates
+  Stream<Map<String, double>> getCategoryDistributionStream() {
+    return _firestore.collection('items').snapshots().map((snapshot) {
+      final categoryCount = <String, int>{};
+
+      for (var doc in snapshot.docs) {
+        final category = (doc.data()['category'] ?? 'Other') as String;
+        categoryCount[category] = (categoryCount[category] ?? 0) + 1;
+      }
+
+      final total = snapshot.docs.length;
+      if (total == 0) return {'No Data': 100.0};
+
+      final distribution = <String, double>{};
+      categoryCount.forEach((category, count) {
+        distribution[category] = (count / total) * 100;
+      });
+
+      return distribution;
+    });
+  }
+
+  /// Stream of category distribution for currently deployed items only.
+  ///
+  /// This listens to the `deployments` collection and collects itemIds for
+  /// deployments which are currently active/deployed. It then looks up the
+  /// corresponding item documents (using an in-memory cache to reduce reads)
+  /// and emits a category -> percentage map.
+  Stream<Map<String, double>> getDeployedCategoryDistributionStream() {
+    return _firestore
+        .collection('deployments')
+        .snapshots()
+        .asyncMap((snapshot) async {
+      final activeItemIds = <String>{};
+
+      for (var doc in snapshot.docs) {
+        final data = doc.data();
+        final status = (data['status'] ?? '').toString().toLowerCase();
+        if (status == 'active' || status == 'deployed') {
+          final itemId = data['itemId'] as String?;
+          if (itemId != null && itemId.isNotEmpty) activeItemIds.add(itemId);
+        }
+      }
+
+      if (activeItemIds.isEmpty) return {'No Data': 100.0};
+
+      // Fetch missing item categories
+      final missing = activeItemIds
+          .where((id) => !_itemCategoryCache.containsKey(id))
+          .toList();
+      if (missing.isNotEmpty) {
+        final futures = missing
+            .map((id) => _firestore.collection('items').doc(id).get())
+            .toList();
+        final results = await Future.wait(futures);
+        for (final d in results) {
+          if (d.exists) {
+            final cat = (d.data()?['category'] ?? 'Other') as String;
+            _itemCategoryCache[d.id] = cat;
+          } else {
+            _itemCategoryCache[d.id] = 'Other';
+          }
+        }
+      }
+
+      final counts = <String, int>{};
+      for (final id in activeItemIds) {
+        final cat = _itemCategoryCache[id] ?? 'Other';
+        counts[cat] = (counts[cat] ?? 0) + 1;
+      }
+
+      final total = counts.values.fold<int>(0, (a, b) => a + b);
+      if (total == 0) return {'No Data': 100.0};
+
+      final distribution = <String, double>{};
+      counts.forEach((category, count) {
+        distribution[category] = (count / total) * 100;
+      });
+
+      return distribution;
+    });
   }
 
   // Categories

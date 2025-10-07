@@ -2,21 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import '../../../../services/firestore_data_service.dart';
+import 'package:inventory_management/services/firestore_data_service.dart';
 
-// Provider for recent deployments stream
-final recentDeploymentsProvider =
-    StreamProvider<List<Map<String, dynamic>>>((ref) {
-  final service = ref.watch(firestoreDataServiceProvider);
-  return service.getDeployments();
-});
+// (Use the centralized providers from the Firestore data service)
 
 class RecentActivitiesWidget extends ConsumerWidget {
   const RecentActivitiesWidget({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final deploymentsAsync = ref.watch(recentDeploymentsProvider);
+    // Use the enriched deployments stream so department/location/user names
+    // are already resolved by the service layer.
+    final deploymentsAsync = ref.watch(recentEnrichedDeploymentsProvider);
 
     return Container(
       padding: const EdgeInsets.all(16),
